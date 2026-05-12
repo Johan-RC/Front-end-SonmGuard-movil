@@ -1,0 +1,55 @@
+export const sessions = [
+  { id: '1', date: 'Hoy, 08:30', km: 12, alerts: 1, duration: '23 min' },
+  { id: '2', date: 'Ayer, 17:15', km: 34, alerts: 0, duration: '48 min' },
+  { id: '3', date: 'Ayer, 07:00', km: 8, alerts: 2, duration: '15 min' },
+  { id: '4', date: '07 Abr, 14:20', km: 56, alerts: 0, duration: '1h 12m' },
+  { id: '5', date: '06 Abr, 09:10', km: 137, alerts: 1, duration: '2h 05m' },
+];
+
+export const historyEvents = [
+  {
+    id: 'sleep-critical',
+    title: 'Evento de Somnolencia',
+    summary: 'Somnolencia critica',
+    detail: 'cierre prolongado de los ojos (4.3s)',
+    time: 'Hace 3h',
+    tone: 'danger' as const,
+    icon: 'warning-outline' as const,
+  },
+  {
+    id: 'sleep-light',
+    title: 'Evento de Somnolencia',
+    summary: 'Somnolencia Leve',
+    detail: 'cierre prolongado de los ojos (2.9s)',
+    time: 'Hace 7h',
+    tone: 'info' as const,
+    icon: 'moon-outline' as const,
+  },
+  {
+    id: 'distraction-heavy',
+    title: 'Evento de distracción',
+    summary: 'Distracción grave',
+    detail: 'mirada fuera de la via (5.2s)',
+    time: 'Hace 15h',
+    tone: 'danger' as const,
+    icon: 'warning-outline' as const,
+  },
+  {
+    id: 'distraction-light',
+    title: 'Evento de distracción',
+    summary: 'Distracción Leve',
+    detail: 'mirada fuera de la via (3.2s)',
+    time: 'Hace 15h',
+    tone: 'info' as const,
+    icon: 'ellipse-outline' as const,
+  },
+  {
+    id: 'phone-use',
+    title: 'Evento de distracción',
+    summary: 'Distracción Leve',
+    detail: 'Uso de telefono (4.7s)',
+    time: 'Hace 15h',
+    tone: 'info' as const,
+    icon: 'ellipse-outline' as const,
+  },
+];
