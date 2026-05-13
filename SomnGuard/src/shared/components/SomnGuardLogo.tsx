@@ -1,4 +1,4 @@
-// components/SomnGuardLogo.tsx
+﻿// components/SomnGuardLogo.tsx
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Logo animado de SomnGuard â€” portado desde la versiÃ³n HTML/CSS/JS.
 //
@@ -34,8 +34,8 @@ const RADIO = 12;   // Radio de esquinas de la pÃ­ldora
 const LX    = 16;   // Rango horizontal mÃ¡ximo de movimiento
 const LY    = 4;    // Rango vertical mÃ¡ximo de movimiento
 
-export default function SomnGuardLogo({ size = 100, hideName = false }: Props) {
-  const scale   = size / 100;
+export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
+  const scale   = size / 80;
   const running = useRef(true);
 
   // â”€â”€ Valores animados â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -224,7 +224,7 @@ export default function SomnGuardLogo({ size = 100, hideName = false }: Props) {
 
       {/* Nombre de la marca â€” se oculta en la splash (se anima por separado) */}
       {!hideName && (
-        <Text style={[styles.brandName, { fontSize: 20 * scale }]}>
+        <Text style={[styles.brandName, { fontSize: 45 * scale }]}>
           SOMNGUARD
         </Text>
       )}

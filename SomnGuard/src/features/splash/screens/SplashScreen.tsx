@@ -125,7 +125,7 @@ export default function SplashScreen() {
          * hideName=true â†’ SomnGuardLogo no renderiza el texto "SOMNGUARD".
          * Lo animamos letra por letra aquÃ­ abajo.
          */}
-        <SomnGuardLogo size={140} hideName />
+        <SomnGuardLogo size={150} hideName />
       </Animated.View>
 
       {/* â”€â”€ Nombre de la marca: letras animadas en cascada â”€â”€ */}
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   /* Cada letra individual */
   brandLetter: {
     color:         theme.colors.accent,
-    fontSize:      34,
+    fontSize:      50,
     fontWeight:    '900',
     letterSpacing: 2,
   },

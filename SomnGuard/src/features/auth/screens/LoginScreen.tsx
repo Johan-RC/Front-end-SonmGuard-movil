@@ -18,7 +18,7 @@ export default function LoginScreen() {
           <SomnGuardLogo size={96} />
         </View>
         <View style={styles.formCard}>
-          <AppTextInput label="Correo electronico" placeholder="" value={form.email} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} error={errors.email} onChangeText={(text) => updateField('email', text)} />
+          <AppTextInput label="Correo electronico" placeholder="" value={form.email} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} error={errors.email} onChangeText={(text) => updateField('email', text)} wrapperStyle={styles.inputSpacing} />
           <AppTextInput label="Contrasena" placeholder="" value={form.password} secureTextEntry error={errors.password} onChangeText={(text) => updateField('password', text)} />
           {!!errors.general && <Text style={styles.formError}>{errors.general}</Text>}
           <View style={styles.buttonWrap}><AppButton title={isSubmitting ? 'Validando...' : 'Inicio sesion'} onPress={submit} /></View>
@@ -36,14 +36,74 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { justifyContent: 'center', alignItems: 'center', paddingTop: 24, paddingHorizontal: theme.spacing.xl, paddingBottom: theme.spacing.xxl },
+  // Estilos para la pantalla completa
+  screen: { 
+  justifyContent: 'center', 
+  alignItems: 'center', 
+  paddingTop: 24, 
+  paddingHorizontal: theme.spacing.xl, 
+  paddingBottom: theme.spacing.xxl },
+  
+  // Estilos para el contenedor del contenido (logo + formulario)
   content: { width: '100%', maxWidth: 380, alignSelf: 'center' },
-  logoArea: { alignItems: 'center', marginBottom: 40 },
-  formCard: { width: '100%' },
-  buttonWrap: { marginTop: theme.spacing.md, marginBottom: theme.spacing.xl, alignSelf: 'center', width: '82%', maxWidth: 280 },
-  formError: { color: theme.colors.error, textAlign: 'center', fontSize: theme.fontSize.xs, marginTop: theme.spacing.xs },
-  linkRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignSelf: 'stretch', marginBottom: theme.spacing.lg },
-  linkText: { color: theme.colors.textLink, fontSize: theme.fontSize.sm, fontWeight: '600' },
+  
+  // Estilos para el area del logo
+  logoArea: { 
+  alignItems: 'center', 
+  marginBottom: 60,},
+  
+  // Estilos para la tarjeta del formulario
+  formCard: {
+  flex: 1,
+  justifyContent: 'center',
+  marginBottom: -80,
+  padding: 10,
+  width: '100%'
+    
+   },
+  
+  // Estilos para el botón de inicio de sesión
+  buttonWrap: { 
+  marginTop: 50, 
+  marginBottom: theme.spacing.xl, 
+  alignSelf: 'center',
+  height: 50, 
+  width: '60%', 
+  maxWidth: 280 },
+  
+  // Estilos para el mensaje de error general del formulario
+  formError: { 
+  color: theme.colors.error, 
+  textAlign: 'center', 
+  fontSize: theme.fontSize.xs, 
+  marginTop: theme.spacing.xs },
+  
+  // Estilos para la fila de enlaces
+  linkRow: { 
+  flexDirection: 'row', 
+  justifyContent: 'center', 
+  alignItems: 'center', 
+  alignSelf: 'stretch', 
+  marginBottom: theme.spacing.lg },
+  
+  // Estilos para los enlaces
+  linkText: { 
+  color: theme.colors.textLink, 
+  fontSize: theme.fontSize.sm, 
+  fontWeight: '600' },
+  
+  // Subrayado para los enlaces
   underline: { textDecorationLine: 'underline' },
-  divider: { marginTop: theme.spacing.lg, borderTopWidth: 1, borderColor: theme.colors.accent, opacity: 0.8 },
+
+  // Espacio extra entre correo y contraseña
+  inputSpacing: {
+    marginBottom: 30,
+  },
+
+  //Linea divisoria
+  divider: { 
+  marginTop: 50,
+  borderTopWidth: 1, 
+  borderColor: theme.colors.accent, 
+  opacity: 0.8 },
 });
