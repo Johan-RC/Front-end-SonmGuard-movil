@@ -36,7 +36,7 @@ export default function HistoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { padding: theme.spacing.lg },
+  screen: { padding: theme.spacing.lg, paddingTop: '15%' },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: theme.spacing.lg },
   title: { color: theme.colors.accent, fontSize: theme.fontSize.xl, fontWeight: '900', marginBottom: 4 },
   subtitle: { color: theme.colors.textMuted, fontSize: theme.fontSize.sm },

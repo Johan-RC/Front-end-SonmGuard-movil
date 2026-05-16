@@ -69,20 +69,99 @@ export default function PreferencesScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { paddingHorizontal: 0, paddingBottom: 0 },
-  topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
-  backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
-  backIcon: { color: theme.colors.accent, fontSize: 28, fontWeight: '900' },
-  headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
-  content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 24, paddingBottom: 92 },
-  sectionTitle: { color: theme.colors.accent, fontSize: 20, fontWeight: '900', marginBottom: 12 },
-  optionCard: { backgroundColor: theme.colors.surface, borderRadius: theme.radius.card, padding: 14, marginBottom: 24 },
-  optionItem: { paddingVertical: 16, paddingHorizontal: 18, borderRadius: theme.radius.input, backgroundColor: theme.colors.background, marginBottom: 10 },
-  optionSelected: { backgroundColor: theme.colors.accent, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 8, elevation: 4 },
-  optionText: { color: theme.colors.text, fontSize: theme.fontSize.sm, fontWeight: '700' },
-  optionTextSelected: { color: theme.colors.background },
-  preferenceCard: { backgroundColor: theme.colors.surface, borderRadius: theme.radius.card, padding: 18, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.14, shadowRadius: 8, elevation: 4 },
-  preferenceLabel: { color: theme.colors.accent, fontSize: theme.fontSize.sm, fontWeight: '800' },
-  preferenceValue: { color: theme.colors.textMuted, fontSize: theme.fontSize.sm },
-  buttonWrap: { marginTop: theme.spacing.lg, width: '100%' },
+  
+  screen: { 
+    paddingHorizontal: 0, 
+    paddingBottom: 0, 
+    paddingTop: '15%' },
+  
+  topBar: { 
+    height: 67, 
+    backgroundColor: '#104863', 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    paddingHorizontal: 14 },
+  
+  backButton: { 
+    width: 44, 
+    height: 44, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginRight: 24 },
+  
+  backIcon: { 
+    color: theme.colors.accent, 
+    fontSize: 28, 
+    fontWeight: '900' },
+  
+  headerTitle: { 
+    color: theme.colors.accent, 
+    fontSize: 25, 
+    fontWeight: '900', 
+    textDecorationLine: 'underline' },
+  
+  content: { 
+    width: '100%', 
+    maxWidth: 420, 
+    alignSelf: 'center', 
+    paddingTop: 24, 
+    paddingHorizontal: 24, 
+    paddingBottom: 92 },
+  
+  sectionTitle: { 
+    color: theme.colors.accent, 
+    fontSize: 20, 
+    fontWeight: '900', 
+    marginBottom: 12 },
+  
+  optionCard: { 
+    backgroundColor: theme.colors.surface, 
+    borderRadius: theme.radius.card, 
+    padding: 14, marginBottom: 24 },
+  
+  optionItem: { 
+    paddingVertical: 16, 
+    paddingHorizontal: 18, 
+    borderRadius: theme.radius.input, 
+    backgroundColor: theme.colors.background, 
+    marginBottom: 10 },
+  
+  optionSelected: { 
+    backgroundColor: theme.colors.accent, 
+    shadowColor: '#000', 
+    shadowOpacity: 0.15, 
+    shadowRadius: 8, 
+    elevation: 4 },
+  
+  optionText: { 
+    color: theme.colors.text, 
+    fontSize: theme.fontSize.sm, 
+    fontWeight: '700' },
+  
+  optionTextSelected: { 
+    color: theme.colors.background },
+  
+  preferenceCard: { 
+    backgroundColor: theme.colors.surface, 
+    borderRadius: theme.radius.card, 
+    padding: 18, flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    shadowColor: '#000', 
+    shadowOpacity: 0.14, 
+    shadowRadius: 8, 
+    elevation: 4 },
+  
+  preferenceLabel: { 
+    color: theme.colors.accent, 
+    fontSize: theme.fontSize.sm, 
+    fontWeight: '800' },
+  
+  preferenceValue: { 
+    color: theme.colors.textMuted, 
+    fontSize: theme.fontSize.sm },
+  
+  buttonWrap: { 
+    marginTop: theme.spacing.lg, 
+    width: '100%' },
 });

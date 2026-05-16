@@ -28,7 +28,9 @@ export default function MonitoringScreen() {
 }
 function StatBox({ value, label }: { value: string; label: string }) { return <View style={styles.statBox}><Text style={styles.statValue}>{value}</Text><Text style={styles.statLabel}>{label}</Text></View>; }
 const styles = StyleSheet.create({
-  screen: { paddingTop: theme.spacing.lg, paddingHorizontal: theme.spacing.lg },
+
+  // Estilos para la pantalla de monitoreo
+  screen: { paddingTop: '15%', paddingHorizontal: theme.spacing.lg },
   header: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, marginBottom: theme.spacing.lg },
   dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: theme.colors.textMuted },
   dotActive: { backgroundColor: '#00ff88' },

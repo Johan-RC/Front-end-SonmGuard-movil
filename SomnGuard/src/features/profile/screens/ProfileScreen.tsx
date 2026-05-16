@@ -97,7 +97,7 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { paddingHorizontal: 0, paddingBottom: 0 },
+  screen: { paddingHorizontal: 0, paddingBottom: 0, paddingTop: '15%' },
   topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 28 },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },

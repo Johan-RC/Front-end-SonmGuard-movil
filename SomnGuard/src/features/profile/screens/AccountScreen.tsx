@@ -40,7 +40,7 @@ export default function AccountScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { paddingHorizontal: 0, paddingBottom: 0 },
+  screen: { paddingHorizontal: 0, paddingBottom: 0, paddingTop: '15%' },
   topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
   backIcon: { color: theme.colors.accent, fontSize: 28, fontWeight: '900' },

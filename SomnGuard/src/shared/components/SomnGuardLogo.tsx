@@ -13,11 +13,11 @@
 import { theme } from '@/shared/theme';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
-import Svg, { Circle, ClipPath, Defs, Path, Rect } from 'react-native-svg';
+import Svg, { Ellipse, Path, Rect } from 'react-native-svg';
 
-// â”€â”€ Wrappers animados de SVG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ Wrappers animados de SVG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const AnimatedRect   = Animated.createAnimatedComponent(Rect);
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const AnimatedEllipse = Animated.createAnimatedComponent(Ellipse);
 const AnimatedPath   = Animated.createAnimatedComponent(Path);
 
 // â”€â”€ Props â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -31,8 +31,9 @@ const CX    = 50;   // Centro X de la pupila en reposo
 const CY    = 50;   // Centro Y de la pupila en reposo
 const ALTO  = 24;   // Altura normal de la pÃ­ldora (ojo abierto)
 const RADIO = 12;   // Radio de esquinas de la pÃ­ldora
-const LX    = 16;   // Rango horizontal mÃ¡ximo de movimiento
-const LY    = 4;    // Rango vertical mÃ¡ximo de movimiento
+const PUPIL_RADIUS = 9; // Radio fijo de la pupila
+const LX    = 14;   // Rango horizontal mÃ¡ximo de movimiento (más seguro en móvil)
+const LY    = 3;    // Rango vertical mÃ¡ximo de movimiento (más contenido en ojo)
 
 export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
   const scale   = size / 80;
@@ -45,6 +46,12 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
   const pillY      = useRef(new Animated.Value(CY - ALTO / 2)).current; // 38
   const pillRx     = useRef(new Animated.Value(RADIO)).current;
   const mouthCY    = useRef(new Animated.Value(81)).current;
+
+  const pupilRy = pillHeight.interpolate({
+    inputRange: [3, ALTO],
+    outputRange: [2, PUPIL_RADIUS],
+    extrapolate: 'clamp',
+  });
 
   // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -62,7 +69,11 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
 
   const sleep   = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
   const rand    = (a: number, b: number) => Math.random() * (b - a) + a;
-  const randPos = () => ({ x: CX + rand(-LX, LX), y: CY + rand(-LY, LY) });
+  const randPos = () => {
+    const x = Math.min(Math.max(CX + rand(-LX, LX), CX - LX), CX + LX);
+    const y = Math.min(Math.max(CY + rand(-LY, LY), CY - LY), CY + LY);
+    return { x, y };
+  };
 
   // â”€â”€ Mover pupila â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   async function movePupil(tx: number, ty: number, duration: number) {
@@ -73,10 +84,13 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
   async function animatePill(newHeight: number, duration: number) {
     const newY  = CY - newHeight / 2;
     const newRx = Math.min(RADIO, newHeight / 2);
+    // Keep the pupil centered in the pill, but keep its radius constant.
+    const targetPupilY = newY + newHeight / 2;
     await Promise.all([
       to(pillHeight, newHeight, duration),
       to(pillY,      newY,      duration),
       to(pillRx,     newRx,     duration),
+      to(pupilY,     targetPupilY, duration),
     ]);
   }
 
@@ -108,7 +122,7 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
     animateMouth(65, 300);
     await animatePill(10, 200);
     await sleep(100);
-    const lx = Math.random() > 0.5 ? CX + 13 : CX - 13;
+    const lx = Math.random() > 0.5 ? CX + LX - 1 : CX - LX + 1;
     await movePupil(lx, CY, rand(600, 1000));
     await sleep(rand(400, 900));
     await movePupil(CX, CY, 400);
@@ -180,13 +194,6 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
         viewBox="0 0 100 112"
         fill="none"
       >
-        {/* Clip path para recortar la pupila dentro de la pÃ­ldora */}
-        <Defs>
-          <ClipPath id="eyeClip">
-            <AnimatedRect x={26} y={pillY} width={48} height={pillHeight} rx={pillRx} ry={pillRx} />
-          </ClipPath>
-        </Defs>
-
         {/* Escudo */}
         <Path
           d="M50 5 L88 19 L88 55 C88 79 70 97 50 107 C30 97 12 79 12 55 L12 19 Z"
@@ -205,11 +212,11 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
           strokeWidth={4}
         />
 
-        {/* Pupila con clip */}
-        <AnimatedCircle
-          cx={pupilX} cy={pupilY} r={9}
+        {/* Pupila adaptativa */}
+        <AnimatedEllipse
+          cx={pupilX} cy={pupilY}
+          rx={PUPIL_RADIUS} ry={pupilRy}
           fill={theme.colors.accent}
-          clipPath="url(#eyeClip)"
         />
 
         {/* Boca */}
@@ -224,7 +231,7 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
 
       {/* Nombre de la marca â€” se oculta en la splash (se anima por separado) */}
       {!hideName && (
-        <Text style={[styles.brandName, { fontSize: 45 * scale }]}>
+        <Text style={[styles.brandName, { fontSize: 25 * scale }]}>
           SOMNGUARD
         </Text>
       )}
