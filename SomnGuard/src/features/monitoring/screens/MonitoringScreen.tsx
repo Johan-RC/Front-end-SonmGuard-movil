@@ -1,14 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/shared/components/AppButton';
 import { Screen } from '@/shared/components/Screen';
 import { monitoringStats } from '@/features/monitoring/mocks/monitoring.mock';
+import { STATIC_COPY } from '@/shared/i18n/constants';
 import { theme } from '@/shared/theme';
 import { useMonitoring } from '@/features/monitoring/hooks/useMonitoring';
 
 export default function MonitoringScreen() {
+  const { t } = useTranslation();
   const { isMonitoring, time, toggleMonitoring } = useMonitoring();
   const pulse = useRef(new Animated.Value(1)).current;
+
   useEffect(() => {
     const animation = Animated.loop(Animated.sequence([
       Animated.timing(pulse, { toValue: 1.16, duration: 750, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
@@ -17,19 +21,35 @@ export default function MonitoringScreen() {
     if (isMonitoring) animation.start(); else pulse.setValue(1);
     return () => animation.stop();
   }, [isMonitoring, pulse]);
+
   return (
     <Screen contentStyle={styles.screen}>
-      <View style={styles.header}><View style={[styles.dot, isMonitoring && styles.dotActive]} /><Text style={styles.headerText}>{isMonitoring ? 'Sistema activo' : 'Sistema inactivo'}</Text><Text style={styles.time}>{time}</Text></View>
-      <View style={[styles.viewer, isMonitoring && styles.viewerActive]}><Animated.View style={[styles.eyeOuter, { transform: [{ scale: pulse }] }]}><View style={[styles.eyeInner, isMonitoring && styles.eyeInnerActive]} /></Animated.View><Text style={styles.viewerText}>{isMonitoring ? 'Monitoriando...' : 'Camara inactiva'}</Text></View>
-      <View style={styles.statsRow}><StatBox value={`${monitoringStats.km}`} label="Km" /><StatBox value={`${monitoringStats.alerts}`} label="Alertas" /><StatBox value={`${monitoringStats.sync}%`} label="SYNC" /></View>
-      <AppButton title={isMonitoring ? 'Detener monitoreo' : 'Iniciar monitoreo'} onPress={toggleMonitoring} />
+      <View style={styles.header}>
+        <View style={[styles.dot, isMonitoring && styles.dotActive]} />
+        <Text style={styles.headerText}>{isMonitoring ? t('monitoring.active') : t('monitoring.inactive')}</Text>
+        <Text style={styles.time}>{time}</Text>
+      </View>
+      <View style={[styles.viewer, isMonitoring && styles.viewerActive]}>
+        <Animated.View style={[styles.eyeOuter, { transform: [{ scale: pulse }] }]}>
+          <View style={[styles.eyeInner, isMonitoring && styles.eyeInnerActive]} />
+        </Animated.View>
+        <Text style={styles.viewerText}>{isMonitoring ? t('monitoring.monitoring') : t('monitoring.cameraInactive')}</Text>
+      </View>
+      <View style={styles.statsRow}>
+        <StatBox value={`${monitoringStats.km}`} label={STATIC_COPY.kmUnit} />
+        <StatBox value={`${monitoringStats.alerts}`} label={t('monitoring.alerts')} />
+        <StatBox value={`${monitoringStats.sync}%`} label={STATIC_COPY.syncLabel} />
+      </View>
+      <AppButton title={isMonitoring ? t('dashboard.stop') : t('dashboard.start')} onPress={toggleMonitoring} />
     </Screen>
   );
 }
-function StatBox({ value, label }: { value: string; label: string }) { return <View style={styles.statBox}><Text style={styles.statValue}>{value}</Text><Text style={styles.statLabel}>{label}</Text></View>; }
-const styles = StyleSheet.create({
 
-  // Estilos para la pantalla de monitoreo
+function StatBox({ value, label }: { value: string; label: string }) {
+  return <View style={styles.statBox}><Text style={styles.statValue}>{value}</Text><Text style={styles.statLabel}>{label}</Text></View>;
+}
+
+const styles = StyleSheet.create({
   screen: { paddingTop: '15%', paddingHorizontal: theme.spacing.lg },
   header: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, marginBottom: theme.spacing.lg },
   dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: theme.colors.textMuted },
@@ -47,5 +67,3 @@ const styles = StyleSheet.create({
   statValue: { color: theme.colors.accent, fontSize: theme.fontSize.lg, fontWeight: '900' },
   statLabel: { color: theme.colors.textMuted, fontSize: theme.fontSize.xs, fontWeight: '700' },
 });
-
-

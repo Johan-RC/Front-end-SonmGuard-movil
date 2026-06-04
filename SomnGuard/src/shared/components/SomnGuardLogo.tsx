@@ -1,4 +1,4 @@
-﻿// components/SomnGuardLogo.tsx
+// components/SomnGuardLogo.tsx
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Logo animado de SomnGuard â€” portado desde la versiÃ³n HTML/CSS/JS.
 //
@@ -10,6 +10,7 @@
 //   hideName â€” si es true, oculta el texto "SOMNGUARD" (para la splash screen)
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+import { STATIC_COPY } from '@/shared/i18n/constants';
 import { theme } from '@/shared/theme';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
@@ -232,7 +233,7 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
       {/* Nombre de la marca â€” se oculta en la splash (se anima por separado) */}
       {!hideName && (
         <Text style={[styles.brandName, { fontSize: 25 * scale }]}>
-          SOMNGUARD
+          {STATIC_COPY.appName}
         </Text>
       )}
     </View>
@@ -251,4 +252,5 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
 });
+
 

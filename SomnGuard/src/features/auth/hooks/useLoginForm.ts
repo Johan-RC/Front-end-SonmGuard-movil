@@ -1,19 +1,22 @@
+import type { TFunction } from 'i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { authService } from '@/features/auth/services/auth.service';
 import { LoginErrors, LoginForm } from '@/features/auth/types/auth.types';
 import { isRequired, isValidEmail } from '@/shared/utils/validation';
 
 const initialForm: LoginForm = { email: '', password: '' };
 
-function validate(form: LoginForm): LoginErrors {
+function validate(form: LoginForm, t: TFunction): LoginErrors {
   const errors: LoginErrors = {};
-  if (!isRequired(form.email)) errors.email = 'El correo es obligatorio.';
-  else if (!isValidEmail(form.email)) errors.email = 'Ingresa un correo valido.';
-  if (!isRequired(form.password)) errors.password = 'La contrasena es obligatoria.';
+  if (!isRequired(form.email)) errors.email = t('auth.errors.emailRequired');
+  else if (!isValidEmail(form.email)) errors.email = t('auth.errors.invalidEmail');
+  if (!isRequired(form.password)) errors.password = t('auth.errors.passwordRequired');
   return errors;
 }
 
 export function useLoginForm(onSuccess: () => void) {
+  const { t } = useTranslation();
   const [form, setForm] = useState<LoginForm>(initialForm);
   const [errors, setErrors] = useState<LoginErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,7 +27,7 @@ export function useLoginForm(onSuccess: () => void) {
   }
 
   async function submit() {
-    const validationErrors = validate(form);
+    const validationErrors = validate(form, t);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
     try {
@@ -32,7 +35,7 @@ export function useLoginForm(onSuccess: () => void) {
       await authService.login(form);
       onSuccess();
     } catch (error) {
-      setErrors({ general: error instanceof Error ? error.message : 'No se pudo iniciar sesion.' });
+      setErrors({ general: error instanceof Error ? error.message : t('auth.errors.loginFailed') });
     } finally {
       setIsSubmitting(false);
     }
@@ -40,5 +43,3 @@ export function useLoginForm(onSuccess: () => void) {
 
   return { form, errors, isSubmitting, updateField, submit };
 }
-
-

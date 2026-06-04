@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { authService } from '@/features/auth/services/auth.service';
 import SomnGuardLogo from '@/shared/components/SomnGuardLogo';
 import { Screen } from '@/shared/components/Screen';
@@ -11,6 +12,7 @@ type PasswordErrors = { password?: string; confirmPassword?: string; general?: s
 
 export default function ResetPasswordScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { email } = useLocalSearchParams<{ email?: string }>();
   const recoveryEmail = String(email ?? '').trim().toLowerCase();
   const [password, setPassword] = useState('');
@@ -20,11 +22,11 @@ export default function ResetPasswordScreen() {
 
   function validate() {
     const nextErrors: PasswordErrors = {};
-    if (!recoveryEmail || !authService.isRegisteredEmail(recoveryEmail)) nextErrors.general = 'Solicita primero el codigo con un correo registrado.';
-    if (!password) nextErrors.password = 'Ingresa una nueva contrasena.';
-    else if (password.length < 8) nextErrors.password = 'Usa minimo 8 caracteres.';
-    if (!confirmPassword) nextErrors.confirmPassword = 'Confirma la contrasena.';
-    else if (confirmPassword !== password) nextErrors.confirmPassword = 'Las contrasenas no coinciden.';
+    if (!recoveryEmail || !authService.isRegisteredEmail(recoveryEmail)) nextErrors.general = t('auth.errors.requestCodeFirst');
+    if (!password) nextErrors.password = t('auth.errors.newPasswordRequired');
+    else if (password.length < 8) nextErrors.password = t('auth.errors.newPasswordMin', { count: 8 });
+    if (!confirmPassword) nextErrors.confirmPassword = t('auth.errors.confirmNewPassword');
+    else if (confirmPassword !== password) nextErrors.confirmPassword = t('auth.errors.passwordsMismatch');
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   }
@@ -36,7 +38,7 @@ export default function ResetPasswordScreen() {
       await authService.resetPassword(recoveryEmail, password);
       router.replace('/(auth)/login');
     } catch (submitError) {
-      setErrors({ general: submitError instanceof Error ? submitError.message : 'No se pudo actualizar la contrasena.' });
+      setErrors({ general: submitError instanceof Error ? submitError.message : t('auth.errors.resetFailed') });
     } finally {
       setIsSubmitting(false);
     }
@@ -46,8 +48,8 @@ export default function ResetPasswordScreen() {
     <Screen keyboard contentStyle={styles.screen}>
       <View style={styles.content}>
         <View style={styles.headerBlock}>
-          <Text style={styles.title}>Cambiar Contraseña</Text>
-          <Text style={styles.subtitle}>Completa la siguiente informacion</Text>
+          <Text style={styles.title}>{t('auth.reset.title')}</Text>
+          <Text style={styles.subtitle}>{t('auth.forgot.subtitle')}</Text>
         </View>
 
         <View style={styles.logoBlock}>
@@ -57,20 +59,20 @@ export default function ResetPasswordScreen() {
         {!!errors.general && <Text style={styles.generalError}>{errors.general}</Text>}
 
         <PasswordField
-          label="Nueva Contraseña"
+          label={t('auth.reset.newPassword')}
           value={password}
           error={errors.password}
           onChangeText={(value) => { setPassword(value); if (errors.password || errors.general) setErrors((current) => ({ ...current, password: undefined, general: undefined })); }}
         />
         <PasswordField
-          label="Confirmar Contraseña"
+          label={t('auth.reset.confirmPassword')}
           value={confirmPassword}
           error={errors.confirmPassword}
           onChangeText={(value) => { setConfirmPassword(value); if (errors.confirmPassword || errors.general) setErrors((current) => ({ ...current, confirmPassword: undefined, general: undefined })); }}
         />
 
         <Pressable accessibilityRole="button" disabled={isSubmitting} style={({ pressed }) => [styles.button, pressed && styles.buttonPressed, isSubmitting && styles.buttonDisabled]} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>{isSubmitting ? 'Guardando...' : 'Cambiar'}</Text>
+          <Text style={styles.buttonText}>{isSubmitting ? t('common.saving') : t('common.change')}</Text>
         </Pressable>
       </View>
     </Screen>
@@ -78,6 +80,8 @@ export default function ResetPasswordScreen() {
 }
 
 function PasswordField({ label, value, error, onChangeText }: { label: string; value: string; error?: string; onChangeText: (value: string) => void }) {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.fieldBlock}>
       <Text style={styles.label}>{label}</Text>
@@ -87,7 +91,7 @@ function PasswordField({ label, value, error, onChangeText }: { label: string; v
           value={value}
           onChangeText={onChangeText}
           secureTextEntry
-          placeholder="••••••••••••••••"
+          placeholder={t('auth.reset.passwordPlaceholder')}
           placeholderTextColor={theme.colors.accent}
           style={styles.input}
         />

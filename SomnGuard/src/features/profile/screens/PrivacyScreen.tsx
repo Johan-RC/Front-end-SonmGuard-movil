@@ -1,24 +1,27 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/shared/components/AppButton';
 import { Screen } from '@/shared/components/Screen';
 import { theme } from '@/shared/theme';
 
 export default function PrivacyScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   function handleDownload() {
-    Alert.alert('Descarga iniciada', 'Se está preparando tu copia de datos. En breve la recibirás.');
+    Alert.alert(t('privacy.downloadAlertTitle'), t('privacy.downloadAlertMessage'));
   }
 
   function handlePermissions() {
-    Alert.alert('Permisos de la app', 'Esta sección te permitirá revisar los permisos que la app utiliza en tu dispositivo.');
+    Alert.alert(t('privacy.permissionsAlertTitle'), t('privacy.permissionsAlertMessage'));
   }
 
   function handleDelete() {
-    Alert.alert('Eliminar cuenta', '¿Estás seguro de que deseas eliminar tu cuenta y todos tus datos?', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Eliminar', style: 'destructive', onPress: () => router.replace('/(auth)/login') },
+    Alert.alert(t('privacy.deleteTitle'), t('privacy.deleteAlertMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('common.delete'), style: 'destructive', onPress: () => router.replace('/(auth)/login') },
     ]);
   }
 
@@ -26,29 +29,29 @@ export default function PrivacyScreen() {
     <Screen contentStyle={styles.screen}>
       <View style={styles.topBar}>
         <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.push('/profile' as any)}>
-          <Text style={styles.backIcon}>←</Text>
+          <Ionicons name="arrow-back-outline" size={30} color={theme.colors.accent} />
         </Pressable>
-        <Text style={styles.headerTitle}>Privacidad de datos</Text>
+        <Text style={styles.headerTitle}>{t('privacy.title')}</Text>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.sectionTitle}>Gestión de datos</Text>
+        <Text style={styles.sectionTitle}>{t('privacy.section')}</Text>
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Descargar mis datos</Text>
-          <Text style={styles.cardDescription}>Descarga una copia completa de tus datos asociados a la cuenta.</Text>
-          <AppButton title="Descargar datos" onPress={handleDownload} />
+          <Text style={styles.cardTitle}>{t('privacy.downloadTitle')}</Text>
+          <Text style={styles.cardDescription}>{t('privacy.downloadDescription')}</Text>
+          <AppButton title={t('privacy.downloadButton')} onPress={handleDownload} />
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Permisos de la aplicación</Text>
-          <Text style={styles.cardDescription}>Gestiona los permisos que has concedido a la aplicación.</Text>
-          <AppButton title="Ver permisos" variant="outline" onPress={handlePermissions} />
+          <Text style={styles.cardTitle}>{t('privacy.permissionsTitle')}</Text>
+          <Text style={styles.cardDescription}>{t('privacy.permissionsDescription')}</Text>
+          <AppButton title={t('privacy.permissionsButton')} variant="outline" onPress={handlePermissions} />
         </View>
 
         <View style={styles.cardDanger}>
-          <Text style={styles.cardTitleDanger}>Eliminar cuenta</Text>
-          <Text style={styles.cardDescription}>Esta acción eliminará tu cuenta y todos tus datos de forma permanente.</Text>
-          <AppButton title="Eliminar cuenta" variant="danger" onPress={handleDelete} />
+          <Text style={styles.cardTitleDanger}>{t('privacy.deleteTitle')}</Text>
+          <Text style={styles.cardDescription}>{t('privacy.deleteDescription')}</Text>
+          <AppButton title={t('privacy.deleteTitle')} variant="danger" onPress={handleDelete} />
         </View>
       </View>
     </Screen>
@@ -59,7 +62,6 @@ const styles = StyleSheet.create({
   screen: { paddingHorizontal: 0, paddingBottom: 0 },
   topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
-  backIcon: { color: theme.colors.accent, fontSize: 28, fontWeight: '900' },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
   content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 24, paddingBottom: 92, gap: 18 },
   sectionTitle: { color: theme.colors.accent, fontSize: 20, fontWeight: '900', marginBottom: 16 },

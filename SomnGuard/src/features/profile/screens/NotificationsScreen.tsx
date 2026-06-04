@@ -1,11 +1,14 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Screen } from '@/shared/components/Screen';
 import { theme } from '@/shared/theme';
 
 export default function NotificationsScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [settings, setSettings] = useState({
     pushNotifications: true,
     securityAlerts: true,
@@ -24,88 +27,47 @@ export default function NotificationsScreen() {
     <Screen contentStyle={styles.screen}>
       <View style={styles.topBar}>
         <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.push('/profile' as any)}>
-          <Text style={styles.backIcon}>←</Text>
+          <Ionicons name="arrow-back-outline" size={30} color={theme.colors.accent} />
         </Pressable>
-        <Text style={styles.headerTitle}>Notificaciones</Text>
+        <Text style={styles.headerTitle}>{t('notifications.title')}</Text>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.sectionTitle}>Notificaciones push</Text>
-        <Text style={styles.sectionDescription}>Recibe alertas importantes en tu dispositivo.</Text>
+        <Text style={styles.sectionTitle}>{t('notifications.pushTitle')}</Text>
+        <Text style={styles.sectionDescription}>{t('notifications.pushDescription')}</Text>
 
         <View style={styles.optionCard}>
-          <View style={styles.optionRow}>
-            <View>
-              <Text style={styles.optionTitle}>Alertas de seguridad</Text>
-              <Text style={styles.optionSubtitle}>Notificaciones sobre eventos de seguridad.</Text>
-            </View>
-            <Switch
-              value={settings.securityAlerts}
-              onValueChange={() => toggleSetting('securityAlerts')}
-              thumbColor={settings.securityAlerts ? theme.colors.accent : theme.colors.text}
-              trackColor={{ false: '#5a8095', true: theme.colors.accentLight }}
-            />
-          </View>
-
-          <View style={styles.optionRow}>
-            <View>
-              <Text style={styles.optionTitle}>Actividad de la cuenta</Text>
-              <Text style={styles.optionSubtitle}>Notificaciones sobre inicios de sesión y cambios.</Text>
-            </View>
-            <Switch
-              value={settings.accountActivity}
-              onValueChange={() => toggleSetting('accountActivity')}
-              thumbColor={settings.accountActivity ? theme.colors.accent : theme.colors.text}
-              trackColor={{ false: '#5a8095', true: theme.colors.accentLight }}
-            />
-          </View>
-
-          <View style={styles.optionRow}>
-            <View>
-              <Text style={styles.optionTitle}>Recordatorios</Text>
-              <Text style={styles.optionSubtitle}>Recordatorios de tareas y actividades importantes.</Text>
-            </View>
-            <Switch
-              value={settings.reminders}
-              onValueChange={() => toggleSetting('reminders')}
-              thumbColor={settings.reminders ? theme.colors.accent : theme.colors.text}
-              trackColor={{ false: '#5a8095', true: theme.colors.accentLight }}
-            />
-          </View>
+          <NotificationRow title={t('notifications.securityAlerts')} subtitle={t('notifications.securityAlertsDescription')} value={settings.securityAlerts} onToggle={() => toggleSetting('securityAlerts')} />
+          <NotificationRow title={t('notifications.accountActivity')} subtitle={t('notifications.accountActivityDescription')} value={settings.accountActivity} onToggle={() => toggleSetting('accountActivity')} />
+          <NotificationRow title={t('notifications.reminders')} subtitle={t('notifications.remindersDescription')} value={settings.reminders} onToggle={() => toggleSetting('reminders')} />
         </View>
 
-        <Text style={styles.sectionTitle}>Notificaciones por correo</Text>
-        <Text style={styles.sectionDescription}>Recibe mensajes con tu actividad y alertas importantes.</Text>
+        <Text style={styles.sectionTitle}>{t('notifications.emailTitle')}</Text>
+        <Text style={styles.sectionDescription}>{t('notifications.emailDescription')}</Text>
 
         <View style={styles.optionCard}>
-          <View style={styles.optionRow}>
-            <View>
-              <Text style={styles.optionTitle}>Resumen diario</Text>
-              <Text style={styles.optionSubtitle}>Recibe un resumen diario de tu actividad.</Text>
-            </View>
-            <Switch
-              value={settings.dailySummary}
-              onValueChange={() => toggleSetting('dailySummary')}
-              thumbColor={settings.dailySummary ? theme.colors.accent : theme.colors.text}
-              trackColor={{ false: '#5a8095', true: theme.colors.accentLight }}
-            />
-          </View>
-
-          <View style={styles.optionRow}>
-            <View>
-              <Text style={styles.optionTitle}>Alertas críticas</Text>
-              <Text style={styles.optionSubtitle}>Recibe alertas críticas inmediatamente.</Text>
-            </View>
-            <Switch
-              value={settings.criticalAlerts}
-              onValueChange={() => toggleSetting('criticalAlerts')}
-              thumbColor={settings.criticalAlerts ? theme.colors.accent : theme.colors.text}
-              trackColor={{ false: '#5a8095', true: theme.colors.accentLight }}
-            />
-          </View>
+          <NotificationRow title={t('notifications.dailySummary')} subtitle={t('notifications.dailySummaryDescription')} value={settings.dailySummary} onToggle={() => toggleSetting('dailySummary')} />
+          <NotificationRow title={t('notifications.criticalAlerts')} subtitle={t('notifications.criticalAlertsDescription')} value={settings.criticalAlerts} onToggle={() => toggleSetting('criticalAlerts')} />
         </View>
       </View>
     </Screen>
+  );
+}
+
+function NotificationRow({ title, subtitle, value, onToggle }: { title: string; subtitle: string; value: boolean; onToggle: () => void }) {
+  return (
+    <View style={styles.optionRow}>
+      <View>
+        <Text style={styles.optionTitle}>{title}</Text>
+        <Text style={styles.optionSubtitle}>{subtitle}</Text>
+      </View>
+      <Switch
+        value={value}
+        onValueChange={onToggle}
+        thumbColor={value ? theme.colors.accent : theme.colors.text}
+        trackColor={{ false: '#5a8095', true: theme.colors.accentLight }}
+      />
+    </View>
   );
 }
 
@@ -113,7 +75,6 @@ const styles = StyleSheet.create({
   screen: { paddingHorizontal: 0, paddingBottom: 0, marginTop: '15%' },
   topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
-  backIcon: { color: theme.colors.accent, fontSize: 28, fontWeight: '900' },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
   content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 24, paddingBottom: 92, gap: 18 },
   sectionTitle: { color: theme.colors.accent, fontSize: 20, fontWeight: '900' },

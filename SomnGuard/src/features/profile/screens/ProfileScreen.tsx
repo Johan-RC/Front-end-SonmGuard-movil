@@ -2,35 +2,35 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import type React from 'react';
 import { useState } from 'react';
-import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Screen } from '@/shared/components/Screen';
 import { profile } from '@/features/profile/mocks/profile.mock';
 import { theme } from '@/shared/theme';
 import { authService } from '@/features/auth/services/auth.service';
 
 type MenuItem = {
-  label: string;
+  labelKey: string;
   route: string;
   icon: React.ComponentProps<typeof Ionicons>['name'];
 };
 
 const menuItems: MenuItem[] = [
-  { label: 'Cuenta', route: 'cuenta', icon: 'person' },
-  { label: 'Seguridad', route: 'seguridad', icon: 'shield-outline' },
-  { label: 'Preferencias', route: 'preferencias', icon: 'options-outline' },
-  { label: 'Notificaciones', route: 'notificaciones', icon: 'notifications' },
+  { labelKey: 'profile.menu.account', route: 'cuenta', icon: 'person' },
+  { labelKey: 'profile.menu.security', route: 'seguridad', icon: 'shield-outline' },
+  { labelKey: 'profile.menu.preferences', route: 'preferencias', icon: 'options-outline' },
+  { labelKey: 'profile.menu.notifications', route: 'notificaciones', icon: 'notifications' },
+  { labelKey: 'profile.menu.privacy', route: 'privacidad-de-datos', icon: 'id-card-outline' },
+  { labelKey: 'profile.menu.support', route: 'soporte', icon: 'help-buoy-outline' },
 ];
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   function handleMenuPress(route: string) {
     router.push(`/profile/${route}` as any);
-  }
-
-  function handleLogout() {
-    setShowLogoutModal(true);
   }
 
   async function confirmLogout() {
@@ -45,7 +45,7 @@ export default function ProfileScreen() {
         <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.push('/(tabs)')}>
           <Ionicons name="arrow-back-outline" size={36} color={theme.colors.accent} />
         </Pressable>
-        <Text style={styles.headerTitle}>Configuración</Text>
+        <Text style={styles.headerTitle}>{t('profile.title')}</Text>
       </View>
 
       <View style={styles.content}>
@@ -62,31 +62,31 @@ export default function ProfileScreen() {
 
         <View style={styles.menuList}>
           {menuItems.map((item) => (
-            <Pressable key={item.label} accessibilityRole="button" style={({ pressed }) => [styles.menuItem, pressed && styles.pressed]} onPress={() => handleMenuPress(item.route)}>
+            <Pressable key={item.labelKey} accessibilityRole="button" style={({ pressed }) => [styles.menuItem, pressed && styles.pressed]} onPress={() => handleMenuPress(item.route)}>
               <Ionicons name={item.icon} size={36} color={theme.colors.accent} style={styles.menuIcon} />
-              <Text style={styles.menuLabel}>{item.label}</Text>
+              <Text style={styles.menuLabel} numberOfLines={1}>{t(item.labelKey)}</Text>
               <Ionicons name="arrow-forward-outline" size={22} color={theme.colors.accent} />
             </Pressable>
           ))}
         </View>
 
-        <Pressable accessibilityRole="button" style={({ pressed }) => [styles.logoutButton, pressed && styles.pressed]} onPress={handleLogout}>
+        <Pressable accessibilityRole="button" style={({ pressed }) => [styles.logoutButton, pressed && styles.pressed]} onPress={() => setShowLogoutModal(true)}>
           <Ionicons name="log-out-outline" size={34} color={theme.colors.accent} />
-          <Text style={styles.logoutText}>Cerrar sesión</Text>
+          <Text style={styles.logoutText}>{t('profile.logout')}</Text>
         </Pressable>
       </View>
 
       <Modal visible={showLogoutModal} transparent animationType="fade" onRequestClose={() => setShowLogoutModal(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Cerrar sesión</Text>
-            <Text style={styles.modalMessage}>¿Seguro que quieres cerrar sesión?</Text>
+            <Text style={styles.modalTitle}>{t('profile.logout')}</Text>
+            <Text style={styles.modalMessage}>{t('profile.logoutQuestion')}</Text>
             <View style={styles.modalButtons}>
               <Pressable style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowLogoutModal(false)}>
-                <Text style={styles.cancelButtonText}>Cancelar</Text>
+                <Text style={styles.cancelButtonText}>{t('common.cancel')}</Text>
               </Pressable>
               <Pressable style={[styles.modalButton, styles.confirmButton]} onPress={confirmLogout}>
-                <Text style={styles.confirmButtonText}>Cerrar sesión</Text>
+                <Text style={styles.confirmButtonText}>{t('profile.logout')}</Text>
               </Pressable>
             </View>
           </View>

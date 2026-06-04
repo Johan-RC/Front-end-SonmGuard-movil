@@ -1,7 +1,9 @@
+import type { TFunction } from 'i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { profileService } from '@/features/profile/services/profile.service';
 import type { AccountErrors, AccountForm } from '@/features/profile/types/profile.types';
-import { hasMinLength, isRequired, isValidColombianPhone, isValidEmail, onlyDigits } from '@/shared/utils/validation';
+import { isRequired, isValidColombianPhone, isValidEmail, onlyDigits } from '@/shared/utils/validation';
 
 const initialProfile = profileService.getProfile();
 const initialForm: AccountForm = {
@@ -11,18 +13,19 @@ const initialForm: AccountForm = {
   birthDate: initialProfile.birthDate,
 };
 
-function validate(form: AccountForm): AccountErrors {
+function validate(form: AccountForm, t: TFunction): AccountErrors {
   const errors: AccountErrors = {};
-  if (!isRequired(form.name)) errors.name = 'El nombre completo es obligatorio.';
-  if (!isRequired(form.email)) errors.email = 'El correo es obligatorio.';
-  else if (!isValidEmail(form.email)) errors.email = 'Ingresa un correo válido.';
-  if (!isRequired(form.phone)) errors.phone = 'El teléfono es obligatorio.';
-  else if (!isValidColombianPhone(form.phone)) errors.phone = 'Ingresa 10 dígitos después de +57.';
-  if (!isRequired(form.birthDate)) errors.birthDate = 'La fecha de nacimiento es obligatoria.';
+  if (!isRequired(form.name)) errors.name = t('account.errors.fullNameRequired');
+  if (!isRequired(form.email)) errors.email = t('auth.errors.emailRequired');
+  else if (!isValidEmail(form.email)) errors.email = t('auth.errors.invalidEmail');
+  if (!isRequired(form.phone)) errors.phone = t('auth.errors.phoneRequired');
+  else if (!isValidColombianPhone(form.phone)) errors.phone = t('auth.errors.invalidPhone');
+  if (!isRequired(form.birthDate)) errors.birthDate = t('account.errors.birthDateRequired');
   return errors;
 }
 
 export function useAccountForm(onSuccess: (form: AccountForm) => void) {
+  const { t } = useTranslation();
   const [form, setForm] = useState<AccountForm>(initialForm);
   const [errors, setErrors] = useState<AccountErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,7 +37,7 @@ export function useAccountForm(onSuccess: (form: AccountForm) => void) {
   }
 
   async function submit() {
-    const validationErrors = validate(form);
+    const validationErrors = validate(form, t);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
     try {
@@ -42,7 +45,7 @@ export function useAccountForm(onSuccess: (form: AccountForm) => void) {
       const updated = await profileService.updateAccount(form);
       onSuccess(updated);
     } catch (error) {
-      setErrors({ email: error instanceof Error ? error.message : 'No se pudo actualizar la cuenta.' });
+      setErrors({ email: error instanceof Error ? error.message : t('account.errors.updateFailed') });
     } finally {
       setIsSubmitting(false);
     }

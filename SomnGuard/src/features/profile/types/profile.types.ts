@@ -1,3 +1,5 @@
+import type { AppLanguage } from '@/shared/i18n';
+
 export type AccountForm = {
   name: string;
   email: string;
@@ -17,9 +19,9 @@ export type SecurityForm = {
 export type SecurityErrors = Partial<Record<'currentPassword' | 'newPassword' | 'confirmPassword', string>>;
 
 export type PreferencesForm = {
-  theme: 'Oscuro' | 'Claro';
-  language: 'Español' | 'Inglés';
-  units: 'Métrico' | 'Imperial';
+  theme: 'dark' | 'light';
+  language: AppLanguage;
+  units: 'metric' | 'imperial';
   soundsEnabled: boolean;
 };
 

@@ -1,19 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Screen } from '@/shared/components/Screen';
 import { sessions } from '@/features/history/mocks/history.mock';
 import { theme } from '@/shared/theme';
 
 export default function HistoryScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <Screen contentStyle={styles.screen}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.title}>Historial</Text>
-          <Text style={styles.subtitle}>Tus ultimas sesiones de conduccion</Text>
+          <Text style={styles.title}>{t('history.title')}</Text>
+          <Text style={styles.subtitle}>{t('history.subtitle')}</Text>
         </View>
         <Pressable accessibilityRole="button" style={styles.filterButton} onPress={() => router.push('/(tabs)/history-filters')}>
           <Ionicons name="filter-outline" size={24} color={theme.colors.accent} />
@@ -23,11 +25,11 @@ export default function HistoryScreen() {
       {sessions.map((session) => (
         <View key={session.id} style={styles.card}>
           <View style={styles.cardLeft}>
-            <Text style={styles.cardDate}>{session.date}</Text>
-            <Text style={styles.cardMeta}>{session.km} km · {session.duration}</Text>
+            <Text style={styles.cardDate}>{t(session.dateKey)}</Text>
+            <Text style={styles.cardMeta}>{session.km} km - {session.duration}</Text>
           </View>
           <View style={[styles.badge, session.alerts > 0 && styles.badgeActive]}>
-            <Text style={[styles.badgeText, session.alerts > 0 && styles.badgeTextActive]}>{session.alerts} {session.alerts === 1 ? 'alerta' : 'alertas'}</Text>
+            <Text style={[styles.badgeText, session.alerts > 0 && styles.badgeTextActive]}>{session.alerts} {session.alerts === 1 ? t('history.alert') : t('history.alerts')}</Text>
           </View>
         </View>
       ))}

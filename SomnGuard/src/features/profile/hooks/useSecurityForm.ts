@@ -1,4 +1,6 @@
+import type { TFunction } from 'i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { profileService } from '@/features/profile/services/profile.service';
 import type { SecurityErrors, SecurityForm } from '@/features/profile/types/profile.types';
 import { hasMinLength, isRequired } from '@/shared/utils/validation';
@@ -10,17 +12,18 @@ const initialForm: SecurityForm = {
   twoFactorEnabled: false,
 };
 
-function validate(form: SecurityForm): SecurityErrors {
+function validate(form: SecurityForm, t: TFunction): SecurityErrors {
   const errors: SecurityErrors = {};
-  if (!isRequired(form.currentPassword)) errors.currentPassword = 'La contraseña actual es obligatoria.';
-  if (!isRequired(form.newPassword)) errors.newPassword = 'La nueva contraseña es obligatoria.';
-  else if (!hasMinLength(form.newPassword, 6)) errors.newPassword = 'Mínimo 6 caracteres.';
-  if (!isRequired(form.confirmPassword)) errors.confirmPassword = 'Confirma la nueva contraseña.';
-  else if (form.newPassword !== form.confirmPassword) errors.confirmPassword = 'Las contraseñas no coinciden.';
+  if (!isRequired(form.currentPassword)) errors.currentPassword = t('security.errors.currentPasswordRequired');
+  if (!isRequired(form.newPassword)) errors.newPassword = t('security.errors.newPasswordRequired');
+  else if (!hasMinLength(form.newPassword, 6)) errors.newPassword = t('auth.errors.minPassword', { count: 6 });
+  if (!isRequired(form.confirmPassword)) errors.confirmPassword = t('security.errors.confirmNewPassword');
+  else if (form.newPassword !== form.confirmPassword) errors.confirmPassword = t('auth.errors.passwordsMismatch');
   return errors;
 }
 
 export function useSecurityForm(onSuccess: () => void) {
+  const { t } = useTranslation();
   const [form, setForm] = useState<SecurityForm>(initialForm);
   const [errors, setErrors] = useState<SecurityErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,7 +34,7 @@ export function useSecurityForm(onSuccess: () => void) {
   }
 
   async function submit() {
-    const validationErrors = validate(form);
+    const validationErrors = validate(form, t);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
     try {
@@ -39,7 +42,7 @@ export function useSecurityForm(onSuccess: () => void) {
       await profileService.changePassword(form.currentPassword, form.newPassword, form.twoFactorEnabled);
       onSuccess();
     } catch (error) {
-      setErrors({ currentPassword: error instanceof Error ? error.message : 'No se pudo actualizar la contraseña.' });
+      setErrors({ currentPassword: error instanceof Error ? error.message : t('security.errors.updateFailed') });
     } finally {
       setIsSubmitting(false);
     }

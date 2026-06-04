@@ -1,16 +1,18 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { authService } from '@/features/auth/services/auth.service';
 import SomnGuardLogo from '@/shared/components/SomnGuardLogo';
 import { Screen } from '@/shared/components/Screen';
+import { STATIC_COPY } from '@/shared/i18n/constants';
 import { theme } from '@/shared/theme';
 
 const CODE_LENGTH = 5;
-const RECOVERY_CODE = '12345';
 
 export default function VerifyResetCodeScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { email } = useLocalSearchParams<{ email?: string }>();
   const recoveryEmail = String(email ?? '').trim().toLowerCase();
   const [digits, setDigits] = useState(Array(CODE_LENGTH).fill(''));
@@ -28,17 +30,17 @@ export default function VerifyResetCodeScreen() {
 
   function handleSubmit() {
     if (!recoveryEmail || !authService.isRegisteredEmail(recoveryEmail)) {
-      setError('Solicita el codigo con un correo registrado.');
+      setError(t('auth.errors.requestRegisteredEmail'));
       return;
     }
 
     const code = digits.join('');
     if (code.length !== CODE_LENGTH) {
-      setError('Completa los 5 cuadros del codigo.');
+      setError(t('auth.errors.completeCode', { count: CODE_LENGTH }));
       return;
     }
-    if (code !== RECOVERY_CODE) {
-      setError('Codigo incorrecto. Usa el codigo de prueba 12345.');
+    if (code !== STATIC_COPY.recoveryCode) {
+      setError(t('auth.errors.invalidCode', { code: STATIC_COPY.recoveryCode }));
       return;
     }
     router.push({ pathname: '/(auth)/reset-password', params: { email: recoveryEmail } });
@@ -52,9 +54,9 @@ export default function VerifyResetCodeScreen() {
         </View>
 
         <View style={styles.messageCard}>
-          <Text style={styles.messageText}>Se envio un codigo a tu</Text>
-          <Text style={styles.messageText}>correo revisalo eh ingresa</Text>
-          <Text style={styles.messageText}>en los siguientes cuadros.</Text>
+          <Text style={styles.messageText}>{t('auth.verify.messageLine1')}</Text>
+          <Text style={styles.messageText}>{t('auth.verify.messageLine2')}</Text>
+          <Text style={styles.messageText}>{t('auth.verify.messageLine3')}</Text>
         </View>
 
         <View style={styles.codeRow}>
@@ -77,7 +79,7 @@ export default function VerifyResetCodeScreen() {
         {!!error && <Text style={styles.error}>{error}</Text>}
 
         <Pressable accessibilityRole="button" style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Cambiar</Text>
+          <Text style={styles.buttonText}>{t('common.change')}</Text>
         </Pressable>
       </View>
     </Screen>

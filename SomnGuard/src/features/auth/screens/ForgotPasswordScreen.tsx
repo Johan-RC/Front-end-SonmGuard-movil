@@ -2,14 +2,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { authService } from '@/features/auth/services/auth.service';
 import SomnGuardLogo from '@/shared/components/SomnGuardLogo';
 import { Screen } from '@/shared/components/Screen';
+import { STATIC_COPY } from '@/shared/i18n/constants';
 import { theme } from '@/shared/theme';
 import { isRequired, isValidEmail } from '@/shared/utils/validation';
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,11 +20,11 @@ export default function ForgotPasswordScreen() {
   async function handleSubmit() {
     const normalizedEmail = email.trim().toLowerCase();
     if (!isRequired(normalizedEmail)) {
-      setError('Ingresa tu correo electronico.');
+      setError(t('auth.errors.emailInputRequired'));
       return;
     }
     if (!isValidEmail(normalizedEmail)) {
-      setError('Ingresa un correo valido.');
+      setError(t('auth.errors.invalidEmail'));
       return;
     }
 
@@ -31,7 +34,7 @@ export default function ForgotPasswordScreen() {
       setError('');
       router.push({ pathname: '/(auth)/verify-reset-code', params: { email: normalizedEmail } });
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'No se pudo validar el correo.');
+      setError(submitError instanceof Error ? submitError.message : t('auth.errors.emailValidationFailed'));
     } finally {
       setIsSubmitting(false);
     }
@@ -41,8 +44,8 @@ export default function ForgotPasswordScreen() {
     <Screen keyboard contentStyle={styles.screen}>
       <View style={styles.content}>
         <View style={styles.headerBlock}>
-          <Text style={styles.title}>¿Olvidaste tu contraseña?</Text>
-          <Text style={styles.subtitle}>Completa la siguiente informacion</Text>
+          <Text style={styles.title}>{t('auth.forgot.title')}</Text>
+          <Text style={styles.subtitle}>{t('auth.forgot.subtitle')}</Text>
         </View>
 
         <View style={styles.logoBlock}>
@@ -50,7 +53,7 @@ export default function ForgotPasswordScreen() {
         </View>
 
         <View style={styles.fieldBlock}>
-          <Text style={styles.label}>Ingresa tu correo</Text>
+          <Text style={styles.label}>{t('auth.forgot.emailLabel')}</Text>
           <View style={[styles.inputRow, !!error && styles.inputRowError]}>
             <Ionicons name="mail-outline" size={28} color={theme.colors.accent} />
             <TextInput
@@ -59,17 +62,17 @@ export default function ForgotPasswordScreen() {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
-              placeholder="correo@gmail.com"
+              placeholder={t('auth.forgot.emailPlaceholder')}
               placeholderTextColor={theme.colors.accent}
               style={styles.input}
             />
           </View>
           {!!error && <Text style={styles.error}>{error}</Text>}
-          <Text style={styles.helper}>Correos de prueba: admin@somnguard.com o prueba@test.com</Text>
+          <Text style={styles.helper}>{t('auth.forgot.helper', { emails: STATIC_COPY.passwordResetEmails })}</Text>
         </View>
 
         <Pressable accessibilityRole="button" disabled={isSubmitting} style={({ pressed }) => [styles.button, pressed && styles.buttonPressed, isSubmitting && styles.buttonDisabled]} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>{isSubmitting ? 'Validando...' : 'Cambiar'}</Text>
+          <Text style={styles.buttonText}>{isSubmitting ? t('common.validating') : t('common.change')}</Text>
         </Pressable>
       </View>
     </Screen>

@@ -1,7 +1,8 @@
 import { profile as profileMock } from '@/features/profile/mocks/profile.mock';
 import type { AccountForm, NotificationSettings, PreferencesForm } from '@/features/profile/types/profile.types';
+import { i18n } from '@/shared/i18n';
 
-let currentProfile = { ...profileMock };
+let currentProfile: typeof profileMock & { birthDate?: string } = { ...profileMock };
 
 export const profileService = {
   getProfile(): AccountForm {
@@ -19,8 +20,9 @@ export const profileService = {
   },
 
   async changePassword(currentPassword: string, newPassword: string, twoFactorEnabled: boolean): Promise<void> {
-    if (!currentPassword.trim()) throw new Error('La contraseña actual es obligatoria.');
-    if (newPassword.trim().length < 6) throw new Error('La nueva contraseña debe tener al menos 6 caracteres.');
+    if (!currentPassword.trim()) throw new Error(i18n.t('security.errors.currentPasswordRequired'));
+    if (newPassword.trim().length < 6) throw new Error(i18n.t('auth.errors.minPassword', { count: 6 }));
+    void twoFactorEnabled;
     return;
   },
 
@@ -33,6 +35,7 @@ export const profileService = {
   },
 
   async downloadData(): Promise<string> {
-    return 'Tu archivo de datos se ha generado correctamente. Revisa tu correo o la carpeta de descargas del dispositivo.';
+    return i18n.t('privacy.downloadAlertMessage');
   },
 };
+

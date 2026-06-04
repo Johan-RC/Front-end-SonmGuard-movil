@@ -1,4 +1,5 @@
 import { AuthUser, LoginForm, RegisterForm } from '@/features/auth/types/auth.types';
+import { i18n } from '@/shared/i18n';
 
 type MockUser = AuthUser & { password: string };
 
@@ -19,14 +20,14 @@ export const authService = {
   async login(credentials: LoginForm): Promise<AuthUser> {
     const email = normalizeEmail(credentials.email);
     const user = MOCK_USERS.find((item) => item.email === email && item.password === credentials.password);
-    if (!user) throw new Error('Correo o contrasena incorrectos.');
+    if (!user) throw new Error(i18n.t('auth.errors.invalidCredentials'));
     return toAuthUser(user);
   },
 
   async register(form: RegisterForm): Promise<AuthUser> {
     const email = normalizeEmail(form.email);
     const existingUser = MOCK_USERS.find((item) => item.email === email);
-    if (existingUser) throw new Error('Este correo ya esta registrado.');
+    if (existingUser) throw new Error(i18n.t('auth.errors.emailAlreadyRegistered'));
 
     const user: MockUser = {
       id: String(Date.now()),
@@ -41,14 +42,14 @@ export const authService = {
   async requestPasswordReset(email: string): Promise<AuthUser> {
     const normalizedEmail = normalizeEmail(email);
     const user = MOCK_USERS.find((item) => item.email === normalizedEmail);
-    if (!user) throw new Error('Ese correo no esta registrado en SomnGuard.');
+    if (!user) throw new Error(i18n.t('auth.errors.emailNotRegistered'));
     return toAuthUser(user);
   },
 
   async resetPassword(email: string, newPassword: string): Promise<void> {
     const normalizedEmail = normalizeEmail(email);
     const user = MOCK_USERS.find((item) => item.email === normalizedEmail);
-    if (!user) throw new Error('No se pudo actualizar la contrasena. Solicita el codigo de nuevo.');
+    if (!user) throw new Error(i18n.t('auth.errors.resetAgain'));
     user.password = newPassword;
   },
 
@@ -58,8 +59,6 @@ export const authService = {
   },
 
   async logout(): Promise<void> {
-    // In a real app, this would clear stored tokens, user data, etc.
-    // For this mock implementation, we just simulate the logout process
-    console.log('User logged out successfully');
+    return;
   },
 };

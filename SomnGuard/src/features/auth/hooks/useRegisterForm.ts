@@ -1,26 +1,29 @@
+import type { TFunction } from 'i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { authService } from '@/features/auth/services/auth.service';
 import { RegisterErrors, RegisterForm } from '@/features/auth/types/auth.types';
 import { hasMinLength, isRequired, isValidColombianPhone, isValidEmail, onlyDigits } from '@/shared/utils/validation';
 
 const initialForm: RegisterForm = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '', phone: '' };
 
-function validate(form: RegisterForm): RegisterErrors {
+function validate(form: RegisterForm, t: TFunction): RegisterErrors {
   const errors: RegisterErrors = {};
-  if (!isRequired(form.firstName)) errors.firstName = 'El nombre es obligatorio.';
-  if (!isRequired(form.lastName)) errors.lastName = 'Los apellidos son obligatorios.';
-  if (!isRequired(form.email)) errors.email = 'El correo es obligatorio.';
-  else if (!isValidEmail(form.email)) errors.email = 'Correo electronico invalido.';
-  if (!isRequired(form.password)) errors.password = 'La contrasena es obligatoria.';
-  else if (!hasMinLength(form.password, 6)) errors.password = 'Minimo 6 caracteres.';
-  if (!isRequired(form.confirmPassword)) errors.confirmPassword = 'Confirma tu contrasena.';
-  else if (form.password !== form.confirmPassword) errors.confirmPassword = 'Las contrasenas no coinciden.';
-  if (!isRequired(form.phone)) errors.phone = 'El telefono es obligatorio.';
-  else if (!isValidColombianPhone(form.phone)) errors.phone = 'Ingresa 10 digitos despues de +57.';
+  if (!isRequired(form.firstName)) errors.firstName = t('auth.errors.firstNameRequired');
+  if (!isRequired(form.lastName)) errors.lastName = t('auth.errors.lastNameRequired');
+  if (!isRequired(form.email)) errors.email = t('auth.errors.emailRequired');
+  else if (!isValidEmail(form.email)) errors.email = t('auth.errors.invalidEmailLong');
+  if (!isRequired(form.password)) errors.password = t('auth.errors.passwordRequired');
+  else if (!hasMinLength(form.password, 6)) errors.password = t('auth.errors.minPassword', { count: 6 });
+  if (!isRequired(form.confirmPassword)) errors.confirmPassword = t('auth.errors.confirmPasswordRequired');
+  else if (form.password !== form.confirmPassword) errors.confirmPassword = t('auth.errors.passwordsMismatch');
+  if (!isRequired(form.phone)) errors.phone = t('auth.errors.phoneRequired');
+  else if (!isValidColombianPhone(form.phone)) errors.phone = t('auth.errors.invalidPhone');
   return errors;
 }
 
 export function useRegisterForm(onSuccess: () => void) {
+  const { t } = useTranslation();
   const [form, setForm] = useState<RegisterForm>(initialForm);
   const [errors, setErrors] = useState<RegisterErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,7 +35,7 @@ export function useRegisterForm(onSuccess: () => void) {
   }
 
   async function submit() {
-    const validationErrors = validate(form);
+    const validationErrors = validate(form, t);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
     try {
@@ -40,7 +43,7 @@ export function useRegisterForm(onSuccess: () => void) {
       await authService.register(form);
       onSuccess();
     } catch (error) {
-      setErrors({ email: error instanceof Error ? error.message : 'No se pudo registrar el usuario.' });
+      setErrors({ email: error instanceof Error ? error.message : t('auth.errors.registerFailed') });
     } finally {
       setIsSubmitting(false);
     }

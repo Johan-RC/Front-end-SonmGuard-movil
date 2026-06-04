@@ -2,21 +2,28 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Screen } from '@/shared/components/Screen';
 import { theme } from '@/shared/theme';
 import { historyEvents } from '@/features/history/mocks/history.mock';
 
-const filterTypes = ['Todos', 'Distracción', 'Somnolencia', 'Cierre ocular'];
+const filterTypes = [
+  { id: 'all', labelKey: 'history.filters.types.all' },
+  { id: 'distraction', labelKey: 'history.filters.types.distraction' },
+  { id: 'sleepiness', labelKey: 'history.filters.types.sleepiness' },
+  { id: 'eyeClosure', labelKey: 'history.filters.types.eyeClosure' },
+] as const;
 
 export default function HistoryFiltersScreen() {
   const router = useRouter();
-  const [selectedType, setSelectedType] = useState('Todos');
+  const { t } = useTranslation();
+  const [selectedType, setSelectedType] = useState('all');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [lastEvents, setLastEvents] = useState('');
 
   function resetFilters() {
-    setSelectedType('Todos');
+    setSelectedType('all');
     setFromDate('');
     setToDate('');
     setLastEvents('');
@@ -28,30 +35,30 @@ export default function HistoryFiltersScreen() {
         <Pressable accessibilityRole="button" style={styles.closeButton} onPress={() => router.back()}>
           <Ionicons name="close-outline" size={46} color="#ffffff" />
         </Pressable>
-        <Text style={styles.title}>Filtros</Text>
+        <Text style={styles.title}>{t('history.filters.title')}</Text>
         <Pressable accessibilityRole="button" onPress={resetFilters}>
-          <Text style={styles.reset}>Reiniciar</Text>
+          <Text style={styles.reset}>{t('history.filters.reset')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.divider} />
 
-      <Text style={styles.sectionTitle}>Rango de fechas</Text>
+      <Text style={styles.sectionTitle}>{t('history.filters.dateRange')}</Text>
       <View style={styles.dateRow}>
-        <FilterInput label="Desde la fecha" value={fromDate} onChangeText={setFromDate} placeholder="" />
-        <FilterInput label="Hasta la fecha" value={toDate} onChangeText={setToDate} placeholder="" />
+        <FilterInput label={t('history.filters.fromDate')} value={fromDate} onChangeText={setFromDate} placeholder="" />
+        <FilterInput label={t('history.filters.toDate')} value={toDate} onChangeText={setToDate} placeholder="" />
       </View>
 
-      <Text style={styles.sectionTitle}>Últimos eventos</Text>
+      <Text style={styles.sectionTitle}>{t('history.filters.latestEvents')}</Text>
       <TextInput value={lastEvents} onChangeText={setLastEvents} keyboardType="number-pad" style={styles.fullInput} placeholder="" placeholderTextColor={theme.colors.placeholder} />
 
-      <Text style={styles.sectionTitle}>Tipo de eventos</Text>
+      <Text style={styles.sectionTitle}>{t('history.filters.eventType')}</Text>
       <View style={styles.chipRow}>
         {filterTypes.map((item) => {
-          const selected = selectedType === item;
+          const selected = selectedType === item.id;
           return (
-            <Pressable key={item} style={[styles.chip, selected && styles.chipSelected]} onPress={() => setSelectedType(item)}>
-              <Text style={[styles.chipText, selected && styles.chipTextSelected]} numberOfLines={1}>{item}</Text>
+            <Pressable key={item.id} style={[styles.chip, selected && styles.chipSelected]} onPress={() => setSelectedType(item.id)}>
+              <Text style={[styles.chipText, selected && styles.chipTextSelected]} numberOfLines={1}>{t(item.labelKey)}</Text>
             </Pressable>
           );
         })}
@@ -64,11 +71,11 @@ export default function HistoryFiltersScreen() {
               <Ionicons name={event.icon} size={38} color="#ffffff" />
             </View>
             <View style={styles.eventBody}>
-              <Text style={styles.eventTitle}>{event.title}</Text>
-              <Text style={styles.eventSummary}>{event.summary}</Text>
-              <Text style={styles.eventDetail}>{event.detail}</Text>
+              <Text style={styles.eventTitle}>{t(event.titleKey)}</Text>
+              <Text style={styles.eventSummary}>{t(event.summaryKey)}</Text>
+              <Text style={styles.eventDetail}>{t(event.detailKey)}</Text>
             </View>
-            <Text style={styles.eventTime}>{event.time}</Text>
+            <Text style={styles.eventTime}>{t(event.timeKey)}</Text>
           </View>
         ))}
       </View>

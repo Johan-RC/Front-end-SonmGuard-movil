@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
-import { Alert, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/shared/components/AppButton';
 import { AppTextInput } from '@/shared/components/AppTextInput';
 import { Screen } from '@/shared/components/Screen';
@@ -9,6 +10,7 @@ import { useRegisterForm } from '@/features/auth/hooks/useRegisterForm';
 
 export default function RegisterScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
@@ -28,28 +30,28 @@ export default function RegisterScreen() {
   return (
     <Screen keyboard contentStyle={styles.scroll}>
       <Pressable accessibilityRole="button" style={styles.closeButton} onPress={() => router.back()}><Text style={styles.closeText}>x</Text></Pressable>
-      <Text style={styles.title}>Registrarse</Text>
-      <Text style={styles.subtitle}>Completa la siguiente informacion</Text>
+      <Text style={styles.title}>{t('auth.register.title')}</Text>
+      <Text style={styles.subtitle}>{t('auth.register.subtitle')}</Text>
       <View style={styles.row}>
-        <AppTextInput wrapperStyle={styles.half} placeholder="Nombres" value={form.firstName} autoCapitalize="words" error={errors.firstName} onChangeText={(text) => updateField('firstName', text)} />
-        <AppTextInput wrapperStyle={styles.half} placeholder="Apellidos" value={form.lastName} autoCapitalize="words" error={errors.lastName} onChangeText={(text) => updateField('lastName', text)} />
+        <AppTextInput wrapperStyle={styles.half} placeholder={t('auth.register.firstName')} value={form.firstName} autoCapitalize="words" error={errors.firstName} onChangeText={(text) => updateField('firstName', text)} />
+        <AppTextInput wrapperStyle={styles.half} placeholder={t('auth.register.lastName')} value={form.lastName} autoCapitalize="words" error={errors.lastName} onChangeText={(text) => updateField('lastName', text)} />
       </View>
-      <AppTextInput placeholder="Correo@gmail.com" value={form.email} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} error={errors.email} onChangeText={(text) => updateField('email', text)} />
-      <AppTextInput placeholder="Contrasena" value={form.password} secureTextEntry error={errors.password} onChangeText={(text) => updateField('password', text)} />
-      <AppTextInput placeholder="Confirmacion de contrasena" value={form.confirmPassword} secureTextEntry error={errors.confirmPassword} onChangeText={(text) => updateField('confirmPassword', text)} />
-      <Text style={styles.phoneLabel}>TELEFONO</Text>
+      <AppTextInput placeholder={t('auth.register.email')} value={form.email} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} error={errors.email} onChangeText={(text) => updateField('email', text)} />
+      <AppTextInput placeholder={t('auth.register.password')} value={form.password} secureTextEntry error={errors.password} onChangeText={(text) => updateField('password', text)} />
+      <AppTextInput placeholder={t('auth.register.confirmPassword')} value={form.confirmPassword} secureTextEntry error={errors.confirmPassword} onChangeText={(text) => updateField('confirmPassword', text)} />
+      <Text style={styles.phoneLabel}>{t('auth.register.phone')}</Text>
       <View style={[styles.phoneRow, !!errors.phone && styles.phoneRowError]}>
         <Text style={styles.phonePrefix}>+57</Text>
         <TextInput style={styles.phoneInput} value={form.phone} keyboardType="phone-pad" maxLength={10} placeholder="" placeholderTextColor={theme.colors.placeholder} onChangeText={(text) => updateField('phone', text)} />
       </View>
       {!!errors.phone && <Text style={styles.error}>{errors.phone}</Text>}
-      <View style={styles.buttonWrap}><AppButton title={isSubmitting ? 'Enviando...' : 'Enviar'} onPress={submit} /></View>
+      <View style={styles.buttonWrap}><AppButton title={isSubmitting ? t('common.submitting') : t('common.submit')} onPress={submit} /></View>
 
       <Modal visible={showSuccessModal} transparent animationType="fade">
         <View style={styles.successModalOverlay}>
           <View style={styles.successModalContent}>
-            <Text style={styles.successModalTitle}>¡Registro exitoso!</Text>
-            <Text style={styles.successModalMessage}>Tu cuenta fue creada correctamente. Redirigiendo al inicio de sesión...</Text>
+            <Text style={styles.successModalTitle}>{t('auth.register.successTitle')}</Text>
+            <Text style={styles.successModalMessage}>{t('auth.register.successMessage')}</Text>
           </View>
         </View>
       </Modal>
@@ -77,5 +79,3 @@ const styles = StyleSheet.create({
   successModalTitle: { color: theme.colors.accent, fontSize: 24, fontWeight: '900', marginBottom: 12 },
   successModalMessage: { color: theme.colors.accent, fontSize: 16, textAlign: 'center' },
 });
-
-
