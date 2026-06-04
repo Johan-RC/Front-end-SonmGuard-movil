@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Screen } from '@/shared/components/Screen';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 
 export default function NotificationsScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
   const [settings, setSettings] = useState({
     pushNotifications: true,
     securityAlerts: true,
@@ -55,6 +57,9 @@ export default function NotificationsScreen() {
 }
 
 function NotificationRow({ title, subtitle, value, onToggle }: { title: string; subtitle: string; value: boolean; onToggle: () => void }) {
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
+
   return (
     <View style={styles.optionRow}>
       <View>
@@ -71,9 +76,10 @@ function NotificationRow({ title, subtitle, value, onToggle }: { title: string; 
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { paddingHorizontal: 0, paddingBottom: 0, marginTop: '15%' },
-  topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
+  topBar: { height: 67, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
   content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 24, paddingBottom: 92, gap: 18 },
@@ -83,4 +89,5 @@ const styles = StyleSheet.create({
   optionRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   optionTitle: { color: theme.colors.accent, fontSize: theme.fontSize.md, fontWeight: '900', marginBottom: 4 },
   optionSubtitle: { color: theme.colors.textMuted, fontSize: theme.fontSize.sm, lineHeight: 20, maxWidth: '80%' },
-});
+  });
+}

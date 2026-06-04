@@ -6,7 +6,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Screen } from '@/shared/components/Screen';
 import { profile } from '@/features/profile/mocks/profile.mock';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 import { authService } from '@/features/auth/services/auth.service';
 
 type MenuItem = {
@@ -28,6 +28,8 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   function handleMenuPress(route: string) {
     router.push(`/profile/${route}` as any);
@@ -96,27 +98,28 @@ export default function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { paddingHorizontal: 0, paddingBottom: 0, paddingTop: '15%' },
-  topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
+  topBar: { height: 67, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 28 },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
   content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 31, paddingBottom: 92 },
-  profileCard: { minHeight: 105, borderRadius: 17, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 13, shadowColor: '#000', shadowOpacity: 0.32, shadowRadius: 8, elevation: 5, marginBottom: 27 },
+  profileCard: { minHeight: 105, borderRadius: 17, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 13, shadowColor: '#000', shadowOpacity: 0.32, shadowRadius: 8, elevation: 5, marginBottom: 27 },
   avatar: { width: 86, height: 86, borderRadius: 43, backgroundColor: '#101727', alignItems: 'center', justifyContent: 'center', marginRight: 13, overflow: 'hidden' },
   avatarBase: { position: 'absolute', bottom: 17, width: 48, height: 11, borderRadius: 16, backgroundColor: '#5c5b54' },
   profileTextBlock: { flex: 1 },
   profileName: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', marginBottom: 6 },
   profileEmail: { color: theme.colors.accent, fontSize: 13, fontWeight: '500' },
   menuList: { gap: 13 },
-  menuItem: { minHeight: 52, borderRadius: 16, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 17, shadowColor: '#000', shadowOpacity: 0.28, shadowRadius: 8, elevation: 4 },
+  menuItem: { minHeight: 52, borderRadius: 16, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 17, shadowColor: '#000', shadowOpacity: 0.28, shadowRadius: 8, elevation: 4 },
   pressed: { opacity: 0.82, transform: [{ scale: 0.99 }] },
   menuIcon: { width: 40, marginRight: 15 },
   menuLabel: { flex: 1, color: theme.colors.accent, fontSize: 20, fontWeight: '900' },
-  logoutButton: { minHeight: 53, borderRadius: 15, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 56, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 7, elevation: 4 },
+  logoutButton: { minHeight: 53, borderRadius: 15, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 56, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 7, elevation: 4 },
   logoutText: { color: theme.colors.accent, fontSize: 18, fontWeight: '900' },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
-  modalContent: { backgroundColor: '#104863', borderRadius: 17, padding: 24, width: '80%', maxWidth: 320, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 10, elevation: 10 },
+  modalContent: { backgroundColor: theme.colors.header, borderRadius: 17, padding: 24, width: '80%', maxWidth: 320, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 10, elevation: 10 },
   modalTitle: { color: theme.colors.accent, fontSize: 24, fontWeight: '900', marginBottom: 12 },
   modalMessage: { color: theme.colors.accent, fontSize: 16, textAlign: 'center', marginBottom: 24 },
   modalButtons: { flexDirection: 'row', gap: 16 },
@@ -125,4 +128,5 @@ const styles = StyleSheet.create({
   cancelButtonText: { color: theme.colors.accent, fontSize: 16, fontWeight: '600' },
   confirmButton: { backgroundColor: '#d32f2f' },
   confirmButtonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-});
+  });
+}

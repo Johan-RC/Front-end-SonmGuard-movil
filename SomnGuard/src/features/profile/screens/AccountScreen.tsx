@@ -6,13 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/shared/components/AppButton';
 import { AppTextInput } from '@/shared/components/AppTextInput';
 import { Screen } from '@/shared/components/Screen';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 import { useAccountForm } from '@/features/profile/hooks/useAccountForm';
 
 export default function AccountScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [saved, setSaved] = useState(false);
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
   const { form, errors, isSubmitting, updateField, submit } = useAccountForm(() => {
     setSaved(true);
     Alert.alert(t('account.updatedTitle'), t('account.updatedMessage'));
@@ -42,13 +44,15 @@ export default function AccountScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { paddingHorizontal: 0, paddingBottom: 0, paddingTop: '15%' },
-  topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
+  topBar: { height: 67, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
   content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 24, paddingBottom: 92 },
   sectionTitle: { color: theme.colors.accent, fontSize: 20, fontWeight: '900', marginBottom: 16 },
   buttonWrap: { marginTop: theme.spacing.lg, width: '100%' },
   helpText: { marginTop: theme.spacing.md, color: theme.colors.textMuted, fontSize: theme.fontSize.sm, textAlign: 'center' },
-});
+  });
+}

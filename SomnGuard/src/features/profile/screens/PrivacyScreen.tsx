@@ -4,11 +4,13 @@ import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/shared/components/AppButton';
 import { Screen } from '@/shared/components/Screen';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 
 export default function PrivacyScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   function handleDownload() {
     Alert.alert(t('privacy.downloadAlertTitle'), t('privacy.downloadAlertMessage'));
@@ -58,16 +60,18 @@ export default function PrivacyScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { paddingHorizontal: 0, paddingBottom: 0 },
-  topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
+  topBar: { height: 67, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
   content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 24, paddingBottom: 92, gap: 18 },
   sectionTitle: { color: theme.colors.accent, fontSize: 20, fontWeight: '900', marginBottom: 16 },
   card: { backgroundColor: theme.colors.surface, borderRadius: theme.radius.card, padding: 20, gap: 12, shadowColor: '#000', shadowOpacity: 0.14, shadowRadius: 10, elevation: 5 },
-  cardDanger: { backgroundColor: '#141d2b', borderRadius: theme.radius.card, padding: 20, gap: 12, borderWidth: 1, borderColor: 'rgba(255, 85, 85, 0.4)' },
+  cardDanger: { backgroundColor: theme.colors.surface, borderRadius: theme.radius.card, padding: 20, gap: 12, borderWidth: 1, borderColor: 'rgba(255, 85, 85, 0.4)' },
   cardTitle: { color: theme.colors.accent, fontSize: theme.fontSize.md, fontWeight: '900' },
   cardTitleDanger: { color: '#ff5555', fontSize: theme.fontSize.md, fontWeight: '900' },
   cardDescription: { color: theme.colors.textMuted, fontSize: theme.fontSize.sm, lineHeight: 20 },
-});
+  });
+}

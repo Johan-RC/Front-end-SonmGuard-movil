@@ -4,13 +4,15 @@ import { useTranslation } from 'react-i18next';
 import SomnGuardLogo from '@/shared/components/SomnGuardLogo';
 import { AppButton } from '@/shared/components/AppButton';
 import { Screen } from '@/shared/components/Screen';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 import { useMonitoring } from '@/features/monitoring/hooks/useMonitoring';
 
 export default function DashboardScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { isMonitoring } = useMonitoring();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   return (
     <Screen centered contentStyle={styles.screen}>
@@ -26,9 +28,11 @@ export default function DashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 34, paddingTop: theme.spacing.xxl },
   logoBlock: { alignItems: 'center', marginBottom: 54 },
   subtitle: { color: theme.colors.text, fontSize: 15, fontWeight: '900', letterSpacing: 0.3, marginTop: -2 },
   actions: { width: '100%', gap: theme.spacing.sm },
-});
+  });
+}

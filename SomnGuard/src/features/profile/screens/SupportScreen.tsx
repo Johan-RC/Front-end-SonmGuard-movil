@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/shared/components/AppButton';
 import { Screen } from '@/shared/components/Screen';
 import { STATIC_COPY } from '@/shared/i18n/constants';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 
 export default function SupportScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   function handleFaq() {
     Alert.alert(t('support.faq'), t('support.faqAlertMessage'));
@@ -55,9 +57,10 @@ export default function SupportScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { paddingHorizontal: 0, paddingBottom: 0 },
-  topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
+  topBar: { height: 67, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
   content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 24, paddingBottom: 92, gap: 18 },
@@ -67,4 +70,5 @@ const styles = StyleSheet.create({
   cardAction: { backgroundColor: theme.colors.surface, borderRadius: theme.radius.card, padding: 20, gap: 10, shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 8, elevation: 4 },
   actionTitle: { color: theme.colors.accent, fontSize: theme.fontSize.md, fontWeight: '900' },
   actionSubtitle: { color: theme.colors.textMuted, fontSize: theme.fontSize.sm, lineHeight: 20 },
-});
+  });
+}

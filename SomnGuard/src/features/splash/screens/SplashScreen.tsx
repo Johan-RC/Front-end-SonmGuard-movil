@@ -13,7 +13,7 @@
 
 import SomnGuardLogo from '@/shared/components/SomnGuardLogo';
 import { STATIC_COPY } from '@/shared/i18n/constants';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
@@ -39,6 +39,8 @@ const FADEOUT_DUR    = 700;  // ms de duraciÃƒÂ³n del fade-out
 
 export default function SplashScreen() {
   const router = useRouter();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   // Ã¢â€â‚¬Ã¢â€â‚¬ Reanimated: controla el fade-out de toda la pantalla Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
   const screenOpacity = useSharedValue(1);
@@ -152,7 +154,8 @@ export default function SplashScreen() {
 }
 
 // Ã¢â€â‚¬Ã¢â€â‚¬ Estilos Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   container: {
     flex:            1,
     backgroundColor: theme.colors.background,
@@ -174,6 +177,7 @@ const styles = StyleSheet.create({
     fontWeight:    '900',
     letterSpacing: 2,
   },
-});
+  });
+}
 
 

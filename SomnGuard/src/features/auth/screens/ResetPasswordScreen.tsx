@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { authService } from '@/features/auth/services/auth.service';
 import SomnGuardLogo from '@/shared/components/SomnGuardLogo';
 import { Screen } from '@/shared/components/Screen';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 
 type PasswordErrors = { password?: string; confirmPassword?: string; general?: string };
 
@@ -19,6 +19,8 @@ export default function ResetPasswordScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<PasswordErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   function validate() {
     const nextErrors: PasswordErrors = {};
@@ -81,6 +83,8 @@ export default function ResetPasswordScreen() {
 
 function PasswordField({ label, value, error, onChangeText }: { label: string; value: string; error?: string; onChangeText: (value: string) => void }) {
   const { t } = useTranslation();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   return (
     <View style={styles.fieldBlock}>
@@ -101,7 +105,8 @@ function PasswordField({ label, value, error, onChangeText }: { label: string; v
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { justifyContent: 'center', alignItems: 'center', paddingTop: 28, paddingHorizontal: 28 },
   content: { width: '100%', maxWidth: 380 },
   headerBlock: { alignItems: 'center' },
@@ -111,12 +116,13 @@ const styles = StyleSheet.create({
   generalError: { color: theme.colors.error, fontSize: 12, fontWeight: '800', textAlign: 'center', marginBottom: 14 },
   fieldBlock: { marginBottom: 28 },
   label: { color: theme.colors.accent, fontSize: 14, fontWeight: '900', marginBottom: 6 },
-  inputRow: { minHeight: 43, borderRadius: 4, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 8 },
+  inputRow: { minHeight: 43, borderRadius: 4, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 8 },
   inputRowError: { borderWidth: 1, borderColor: theme.colors.error },
   input: { flex: 1, color: theme.colors.accent, fontSize: 15, fontWeight: '800', paddingVertical: 7 },
   error: { color: theme.colors.error, fontSize: 11, fontWeight: '800', marginTop: 5 },
-  button: { alignSelf: 'center', width: '100%', minHeight: 53, borderRadius: 26, backgroundColor: '#104863', alignItems: 'center', justifyContent: 'center', marginTop: 18, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 10, elevation: 4 },
+  button: { alignSelf: 'center', width: '100%', minHeight: 53, borderRadius: 26, backgroundColor: theme.colors.header, alignItems: 'center', justifyContent: 'center', marginTop: 18, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 10, elevation: 4 },
   buttonPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
   buttonDisabled: { opacity: 0.62 },
   buttonText: { color: theme.colors.accent, fontSize: 20, fontWeight: '900' },
-});
+  });
+}

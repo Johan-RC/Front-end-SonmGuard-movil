@@ -6,7 +6,7 @@ import { authService } from '@/features/auth/services/auth.service';
 import SomnGuardLogo from '@/shared/components/SomnGuardLogo';
 import { Screen } from '@/shared/components/Screen';
 import { STATIC_COPY } from '@/shared/i18n/constants';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 
 const CODE_LENGTH = 5;
 
@@ -18,6 +18,8 @@ export default function VerifyResetCodeScreen() {
   const [digits, setDigits] = useState(Array(CODE_LENGTH).fill(''));
   const [error, setError] = useState('');
   const inputRefs = useRef<(TextInput | null)[]>([]);
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   function updateDigit(value: string, index: number) {
     const digit = value.replace(/\D/g, '').slice(-1);
@@ -86,17 +88,19 @@ export default function VerifyResetCodeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { justifyContent: 'center', alignItems: 'center', paddingTop: 28, paddingHorizontal: 12 },
   content: { width: '100%', maxWidth: 360, alignItems: 'center' },
   logoBlock: { marginBottom: 18 },
-  messageCard: { width: '100%', borderRadius: 10, backgroundColor: '#104863', paddingHorizontal: 16, paddingVertical: 16, gap: 14, shadowColor: '#000', shadowOpacity: 0.28, shadowRadius: 10, elevation: 5 },
+  messageCard: { width: '100%', borderRadius: 10, backgroundColor: theme.colors.header, paddingHorizontal: 16, paddingVertical: 16, gap: 14, shadowColor: '#000', shadowOpacity: 0.28, shadowRadius: 10, elevation: 5 },
   messageText: { color: theme.colors.accent, fontSize: 18, fontWeight: '900', lineHeight: 24 },
   codeRow: { flexDirection: 'row', justifyContent: 'center', gap: 7, marginTop: 52 },
-  codeBox: { width: 37, height: 37, borderRadius: 7, backgroundColor: '#104863', color: theme.colors.accent, fontSize: 18, fontWeight: '900' },
+  codeBox: { width: 37, height: 37, borderRadius: 7, backgroundColor: theme.colors.header, color: theme.colors.accent, fontSize: 18, fontWeight: '900' },
   codeBoxError: { borderWidth: 1, borderColor: theme.colors.error },
   error: { color: theme.colors.error, fontSize: 11, fontWeight: '800', marginTop: 10, textAlign: 'center' },
-  button: { width: 184, minHeight: 55, borderRadius: 28, backgroundColor: '#104863', alignItems: 'center', justifyContent: 'center', marginTop: 50, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 10, elevation: 4 },
+  button: { width: 184, minHeight: 55, borderRadius: 28, backgroundColor: theme.colors.header, alignItems: 'center', justifyContent: 'center', marginTop: 50, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 10, elevation: 4 },
   buttonPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
   buttonText: { color: theme.colors.accent, fontSize: 20, fontWeight: '900' },
-});
+  });
+}

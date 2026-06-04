@@ -5,13 +5,15 @@ import SomnGuardLogo from '@/shared/components/SomnGuardLogo';
 import { AppButton } from '@/shared/components/AppButton';
 import { AppTextInput } from '@/shared/components/AppTextInput';
 import { Screen } from '@/shared/components/Screen';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 import { useLoginForm } from '@/features/auth/hooks/useLoginForm';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { form, errors, isSubmitting, updateField, submit } = useLoginForm(() => router.replace('/(tabs)'));
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   return (
     <Screen keyboard contentStyle={styles.screen}>
@@ -37,7 +39,8 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { justifyContent: 'center', alignItems: 'center', paddingTop: 24, paddingHorizontal: theme.spacing.xl, paddingBottom: theme.spacing.xxl },
   content: { width: '100%', maxWidth: 380, alignSelf: 'center' },
   logoArea: { alignItems: 'center', marginBottom: 60 },
@@ -49,4 +52,5 @@ const styles = StyleSheet.create({
   underline: { textDecorationLine: 'underline' },
   inputSpacing: { marginBottom: 30 },
   divider: { marginTop: 50, borderTopWidth: 1, borderColor: theme.colors.accent, opacity: 0.8 },
-});
+  });
+}

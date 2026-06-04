@@ -5,13 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/shared/components/AppButton';
 import { AppTextInput } from '@/shared/components/AppTextInput';
 import { Screen } from '@/shared/components/Screen';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 import { useRegisterForm } from '@/features/auth/hooks/useRegisterForm';
 
 export default function RegisterScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   useEffect(() => {
     if (showSuccessModal) {
@@ -59,7 +61,8 @@ export default function RegisterScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   scroll: { paddingTop: theme.spacing.xl, paddingHorizontal: theme.spacing.xl },
   closeButton: { width: 40, height: 40, justifyContent: 'center', marginBottom: theme.spacing.sm },
   closeText: { color: theme.colors.textMuted, fontSize: 32, lineHeight: 34 },
@@ -75,7 +78,8 @@ const styles = StyleSheet.create({
   error: { color: theme.colors.error, fontSize: theme.fontSize.xs, marginBottom: theme.spacing.sm, marginLeft: 4 },
   buttonWrap: { marginTop: theme.spacing.xl, alignSelf: 'center', width: '100%' },
   successModalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
-  successModalContent: { backgroundColor: '#104863', borderRadius: 17, padding: 24, width: '80%', maxWidth: 320, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 10, elevation: 10 },
+  successModalContent: { backgroundColor: theme.colors.header, borderRadius: 17, padding: 24, width: '80%', maxWidth: 320, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 10, elevation: 10 },
   successModalTitle: { color: theme.colors.accent, fontSize: 24, fontWeight: '900', marginBottom: 12 },
   successModalMessage: { color: theme.colors.accent, fontSize: 16, textAlign: 'center' },
-});
+  });
+}

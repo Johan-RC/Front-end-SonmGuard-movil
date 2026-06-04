@@ -11,7 +11,7 @@
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 import { STATIC_COPY } from '@/shared/i18n/constants';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
 import Svg, { Ellipse, Path, Rect } from 'react-native-svg';
@@ -39,6 +39,8 @@ const LY    = 3;    // Rango vertical mÃ¡ximo de movimiento (más contenido en
 export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
   const scale   = size / 80;
   const running = useRef(true);
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   // â”€â”€ Valores animados â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const pupilX     = useRef(new Animated.Value(CX)).current;
@@ -240,7 +242,8 @@ export default function SomnGuardLogo({ size = 80, hideName = false }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   container: {
     alignItems: 'center',
     gap: 10,
@@ -251,6 +254,7 @@ const styles = StyleSheet.create({
     letterSpacing: 4,
     textTransform: 'uppercase',
   },
-});
+  });
+}
 
 

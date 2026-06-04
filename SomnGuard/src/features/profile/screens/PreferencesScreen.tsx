@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/shared/components/AppButton';
 import { Screen } from '@/shared/components/Screen';
 import { appLanguages, i18n, normalizeLanguage, type AppLanguage } from '@/shared/i18n';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 import { usePreferencesForm } from '@/features/profile/hooks/usePreferencesForm';
 import type { PreferencesForm } from '@/features/profile/types/profile.types';
 
@@ -22,13 +22,20 @@ const unitOptions: { value: PreferencesForm['units']; labelKey: string }[] = [
 export default function PreferencesScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { colorScheme, setColorScheme, theme } = useAppTheme();
+  const styles = createStyles(theme);
   const { form, isSubmitting, updateField, submit } = usePreferencesForm(() => {
     Alert.alert(t('preferences.savedTitle'), t('preferences.savedMessage'));
-  }, normalizeLanguage(i18n.resolvedLanguage ?? i18n.language));
+  }, normalizeLanguage(i18n.resolvedLanguage ?? i18n.language), colorScheme);
 
   function handleLanguageChange(language: AppLanguage) {
     updateField('language', language);
     void i18n.changeLanguage(language);
+  }
+
+  function handleThemeChange(value: PreferencesForm['theme']) {
+    updateField('theme', value);
+    setColorScheme(value);
   }
 
   return (
@@ -44,7 +51,7 @@ export default function PreferencesScreen() {
         <Text style={styles.sectionTitle}>{t('preferences.appearance')}</Text>
         <View style={styles.optionCard}>
           {themeOptions.map((item) => (
-            <Pressable key={item.value} style={[styles.optionItem, form.theme === item.value && styles.optionSelected]} onPress={() => updateField('theme', item.value)}>
+            <Pressable key={item.value} style={[styles.optionItem, form.theme === item.value && styles.optionSelected]} onPress={() => handleThemeChange(item.value)}>
               <Text style={[styles.optionText, form.theme === item.value && styles.optionTextSelected]}>{t(item.labelKey)}</Text>
             </Pressable>
           ))}
@@ -82,9 +89,10 @@ export default function PreferencesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { paddingHorizontal: 0, paddingBottom: 0, paddingTop: '15%' },
-  topBar: { height: 67, backgroundColor: '#104863', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
+  topBar: { height: 67, backgroundColor: theme.colors.header, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: 24 },
   headerTitle: { color: theme.colors.accent, fontSize: 25, fontWeight: '900', textDecorationLine: 'underline' },
   content: { width: '100%', maxWidth: 420, alignSelf: 'center', paddingTop: 24, paddingHorizontal: 24, paddingBottom: 92 },
@@ -98,4 +106,5 @@ const styles = StyleSheet.create({
   preferenceLabel: { color: theme.colors.accent, fontSize: theme.fontSize.sm, fontWeight: '800' },
   preferenceValue: { color: theme.colors.textMuted, fontSize: theme.fontSize.sm },
   buttonWrap: { marginTop: theme.spacing.lg, width: '100%' },
-});
+  });
+}

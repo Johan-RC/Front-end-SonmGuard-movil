@@ -1,10 +1,12 @@
 import { PropsWithChildren } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, ViewStyle } from 'react-native';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 
 type Props = PropsWithChildren<{ keyboard?: boolean; centered?: boolean; contentStyle?: ViewStyle }>;
 
 export function Screen({ children, keyboard = false, centered = false, contentStyle }: Props) {
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
   const content = (
     <ScrollView
       style={styles.wrapper}
@@ -25,10 +27,12 @@ export function Screen({ children, keyboard = false, centered = false, contentSt
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   wrapper: { flex: 1, backgroundColor: theme.colors.background },
   scroll: { flexGrow: 1, backgroundColor: theme.colors.background, paddingHorizontal: theme.spacing.xl, paddingBottom: theme.spacing.xxl },
   centered: { justifyContent: 'center' },
-});
+  });
+}
 
 

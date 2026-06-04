@@ -4,11 +4,13 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Screen } from '@/shared/components/Screen';
 import { sessions } from '@/features/history/mocks/history.mock';
-import { theme } from '@/shared/theme';
+import { useAppTheme } from '@/shared/theme';
 
 export default function HistoryScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   return (
     <Screen contentStyle={styles.screen}>
@@ -37,12 +39,13 @@ export default function HistoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
+  return StyleSheet.create({
   screen: { padding: theme.spacing.lg, paddingTop: '15%' },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: theme.spacing.lg },
   title: { color: theme.colors.accent, fontSize: theme.fontSize.xl, fontWeight: '900', marginBottom: 4 },
   subtitle: { color: theme.colors.textMuted, fontSize: theme.fontSize.sm },
-  filterButton: { width: 44, height: 44, borderRadius: 13, backgroundColor: '#104863', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.colors.border },
+  filterButton: { width: 44, height: 44, borderRadius: 13, backgroundColor: theme.colors.header, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.colors.border },
   card: { backgroundColor: theme.colors.surface, borderRadius: theme.radius.card, borderWidth: 1, borderColor: theme.colors.border, padding: theme.spacing.md, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: theme.spacing.sm },
   cardLeft: { flex: 1, paddingRight: theme.spacing.sm },
   cardDate: { color: theme.colors.text, fontWeight: '800', fontSize: theme.fontSize.sm },
@@ -51,4 +54,5 @@ const styles = StyleSheet.create({
   badgeActive: { backgroundColor: 'rgba(255,153,0,0.15)', borderColor: 'rgba(255,153,0,0.5)' },
   badgeText: { color: theme.colors.textMuted, fontSize: theme.fontSize.xs, fontWeight: '800' },
   badgeTextActive: { color: '#ff9900' },
-});
+  });
+}
