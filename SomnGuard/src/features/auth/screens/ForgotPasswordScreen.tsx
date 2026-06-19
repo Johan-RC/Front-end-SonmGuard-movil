@@ -44,6 +44,13 @@ export default function ForgotPasswordScreen() {
 
   return (
     <Screen keyboard contentStyle={styles.screen}>
+      
+      <View style={styles.icon}>
+        <Pressable onPress={() => router.back()} style={{ padding: 8 }}>
+          <Ionicons name="arrow-back" size={28} color={theme.colors.accent}/>
+        </Pressable>
+      </View>
+
       <View style={styles.content}>
         <View style={styles.headerBlock}>
           <Text style={styles.title}>{t('auth.forgot.title')}</Text>
@@ -100,5 +107,6 @@ function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
   buttonPressed: { opacity: 0.8, transform: [{ scale: 0.98 }] },
   buttonDisabled: { opacity: 0.62 },
   buttonText: { color: theme.colors.background, fontSize: 18, fontWeight: '900' },
+  icon: { position: 'absolute', top: '5%', left: 15, zIndex: 10 },
   });
 }
