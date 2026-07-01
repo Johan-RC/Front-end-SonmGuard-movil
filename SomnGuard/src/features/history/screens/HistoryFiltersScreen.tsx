@@ -113,7 +113,7 @@ function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
   fullInput: { height: 41, borderRadius: 7, backgroundColor: theme.colors.header, color: theme.colors.accent, marginHorizontal: 24, marginBottom: 24, paddingHorizontal: 10, fontWeight: '800' },
   chipRow: { flexDirection: 'row', gap: 6, marginHorizontal: 23, marginBottom: 28 },
   chip: { minWidth: 66, maxWidth: 96, height: 35, borderRadius: 8, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8, shadowColor: '#000', shadowOpacity: 0.28, shadowRadius: 5, elevation: 3 },
-  chipSelected: { backgroundColor: theme.colors.header },
+  chipSelected: { backgroundColor: theme.colors.tabIconSelected},
   chipText: { color: theme.colors.header, fontSize: 14, fontWeight: '900' },
   chipTextSelected: { color: '#ffffff' },
   eventsList: { gap: 11, paddingHorizontal: 24 },

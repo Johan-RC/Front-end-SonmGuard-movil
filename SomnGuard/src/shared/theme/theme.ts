@@ -25,6 +25,7 @@ export const Colors = {
     tabIconSelected: '#40566a',
     header:        '#e8e3d8',
     viewer:        '#ece8de',
+    
   },
   dark: {
     background:    '#09111f',

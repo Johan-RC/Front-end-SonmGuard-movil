@@ -16,12 +16,14 @@ const es = {
   },
   auth: {
     login: {
-      emailLabel: 'Correo electronico',
+      emailLabel: 'Correo electrónico',
       passwordLabel: 'Contrasena',
       submit: 'Iniciar sesion',
       registerPrompt: 'No tienes cuenta?',
       registerLink: 'Registrate',
-      forgotPassword: 'Ha olvidado su contrasena?',
+      forgotPassword: '¿Ha olvidado su contraseña?',
+      
+    
     },
     register: {
       title: 'Registrarse',
@@ -30,10 +32,13 @@ const es = {
       lastName: 'Apellidos',
       email: 'Correo@gmail.com',
       password: 'Contrasena',
-      confirmPassword: 'Confirmacion de contrasena',
+      confirmPassword: 'Confirmación de contraseña',
       phone: 'TELEFONO',
-      successTitle: 'Registro exitoso!',
+      successTitle: '¡Registro exitoso!',
       successMessage: 'Tu cuenta fue creada correctamente. Redirigiendo al inicio de sesion...',
+      acceptTerms:'Aceptar los',
+      termsAndConditions:'terminos y condiciones!'
+      
     },
     forgot: {
       title: 'Olvidaste tu contrasena?',
@@ -43,7 +48,7 @@ const es = {
       helper: 'Correos de prueba: {{emails}}',
     },
     verify: {
-      messageLine1: 'Se envio un codigo a tu',
+      messageLine1: 'Se envió un código a tu',
       messageLine2: 'correo revisalo e ingresa',
       messageLine3: 'en los siguientes cuadros.',
     },
@@ -55,27 +60,27 @@ const es = {
     },
     errors: {
       emailRequired: 'El correo es obligatorio.',
-      emailInputRequired: 'Ingresa tu correo electronico.',
+      emailInputRequired: 'Ingresa tu correo electrónico.',
       invalidEmail: 'Ingresa un correo valido.',
-      invalidEmailLong: 'Correo electronico invalido.',
-      passwordRequired: 'La contrasena es obligatoria.',
-      invalidCredentials: 'Correo o contrasena incorrectos.',
-      loginFailed: 'No se pudo iniciar sesion.',
+      invalidEmailLong: 'Correo electrónico inválido.',
+      passwordRequired: 'La contraseña es obligatoria.',
+      invalidCredentials: 'Correo o contraseña incorrectos.',
+      loginFailed: 'No se pudo iniciar sesión.',
       firstNameRequired: 'El nombre es obligatorio.',
       lastNameRequired: 'Los apellidos son obligatorios.',
       minPassword: 'Minimo {{count}} caracteres.',
       confirmPasswordRequired: 'Confirma tu contrasena.',
-      passwordsMismatch: 'Las contrasenas no coinciden.',
-      phoneRequired: 'El telefono es obligatorio.',
-      invalidPhone: 'Ingresa 10 digitos despues de +57.',
+      passwordsMismatch: 'Las contraseñas no coinciden.',
+      phoneRequired: 'El teléfono es obligatorio.',
+      invalidPhone: 'Ingresa 10 dígitos después de +57.',
       registerFailed: 'No se pudo registrar el usuario.',
-      emailAlreadyRegistered: 'Este correo ya esta registrado.',
-      emailNotRegistered: 'Ese correo no esta registrado en SomnGuard.',
+      emailAlreadyRegistered: 'Este correo ya está registrado.',
+      emailNotRegistered: 'Ese correo no está registrado en SomnGuard.',
       emailValidationFailed: 'No se pudo validar el correo.',
       requestRegisteredEmail: 'Solicita el codigo con un correo registrado.',
       requestCodeFirst: 'Solicita primero el codigo con un correo registrado.',
       completeCode: 'Completa los {{count}} cuadros del codigo.',
-      invalidCode: 'Codigo incorrecto. Usa el codigo de prueba {{code}}.',
+      invalidCode: 'Código incorrecto. Usa el codigo de prueba {{code}}.',
       newPasswordRequired: 'Ingresa una nueva contrasena.',
       newPasswordMin: 'Usa minimo {{count}} caracteres.',
       confirmNewPassword: 'Confirma la contrasena.',
@@ -116,7 +121,7 @@ const es = {
     },
     filters: {
       title: 'Filtros',
-      reset: 'Reiniciar',
+      reset: 'Limpiar filtro',
       dateRange: 'Rango de fechas',
       fromDate: 'Desde la fecha',
       toDate: 'Hasta la fecha',
@@ -311,6 +316,8 @@ const en: typeof es = {
       phone: 'PHONE',
       successTitle: 'Registration complete!',
       successMessage: 'Your account was created successfully. Redirecting to sign in...',
+      acceptTerms:'Accept the',
+      termsAndConditions:'terms and conditions!'
     },
     forgot: {
       title: 'Forgot your password?',
@@ -393,7 +400,7 @@ const en: typeof es = {
     },
     filters: {
       title: 'Filters',
-      reset: 'Reset',
+      reset: 'Clean filter',
       dateRange: 'Date range',
       fromDate: 'From date',
       toDate: 'To date',
@@ -588,6 +595,8 @@ const pt: typeof es = {
       phone: 'TELEFONE',
       successTitle: 'Cadastro concluido!',
       successMessage: 'Sua conta foi criada corretamente. Redirecionando para entrar...',
+      acceptTerms:'Aceite os',
+      termsAndConditions:'termos e condições!'
     },
     forgot: {
       title: 'Esqueceu sua senha?',
@@ -611,7 +620,7 @@ const pt: typeof es = {
       emailRequired: 'O email e obrigatorio.',
       emailInputRequired: 'Digite seu email.',
       invalidEmail: 'Digite um email valido.',
-      invalidEmailLong: 'Email invalido.',
+      invalidEmailLong: 'Email inválido.',
       passwordRequired: 'A senha e obrigatoria.',
       invalidCredentials: 'Email ou senha incorretos.',
       loginFailed: 'Nao foi possivel entrar.',
@@ -670,7 +679,7 @@ const pt: typeof es = {
     },
     filters: {
       title: 'Filtros',
-      reset: 'Reiniciar',
+      reset: 'Limpar filtro',
       dateRange: 'Intervalo de datas',
       fromDate: 'Desde a data',
       toDate: 'Ate a data',
@@ -865,6 +874,8 @@ const fr: typeof es = {
       phone: 'TELEPHONE',
       successTitle: 'Inscription reussie!',
       successMessage: 'Ton compte a ete cree correctement. Redirection vers la connexion...',
+       acceptTerms:'Acceptez les',
+      termsAndConditions:'conditions générales!'
     },
     forgot: {
       title: 'Mot de passe oublie?',
@@ -947,7 +958,7 @@ const fr: typeof es = {
     },
     filters: {
       title: 'Filtres',
-      reset: 'Reinitialiser',
+      reset: 'Nettoyer le filtre',
       dateRange: 'Plage de dates',
       fromDate: 'Depuis la date',
       toDate: 'Jusqu a la date',

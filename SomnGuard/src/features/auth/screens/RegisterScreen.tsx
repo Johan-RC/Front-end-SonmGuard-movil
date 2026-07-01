@@ -7,13 +7,19 @@ import { AppTextInput } from '@/shared/components/AppTextInput';
 import { Screen } from '@/shared/components/Screen';
 import { useAppTheme } from '@/shared/theme';
 import { useRegisterForm } from '@/features/auth/hooks/useRegisterForm';
+import Checkbox from 'expo-checkbox';
 
 export default function RegisterScreen() {
+
   const router = useRouter();
   const { t } = useTranslation();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
+
+  //funcion par el estado de terminos y condiciones
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  
 
   useEffect(() => {
     if (showSuccessModal) {
@@ -28,6 +34,16 @@ export default function RegisterScreen() {
   const { form, errors, isSubmitting, updateField, submit } = useRegisterForm(() => {
     setShowSuccessModal(true);
   });
+
+  //terminos condiciones loogica 
+  const handleSubmit = () => {
+  if (!acceptedTerms) {
+    alert('error , aceptar terminos y condiciones porfavor!!')
+    return;
+  }
+
+  submit(); 
+};
 
   return (
     <Screen keyboard contentStyle={styles.scroll}>
@@ -47,7 +63,12 @@ export default function RegisterScreen() {
         <TextInput style={styles.phoneInput} value={form.phone} keyboardType="phone-pad" maxLength={10} placeholder="" placeholderTextColor={theme.colors.placeholder} onChangeText={(text) => updateField('phone', text)} />
       </View>
       {!!errors.phone && <Text style={styles.error}>{errors.phone}</Text>}
-      <View style={styles.buttonWrap}><AppButton title={isSubmitting ? t('common.submitting') : t('common.submit')} onPress={submit} /></View>
+
+
+      <View style={styles.termsContainer}> <Checkbox value={acceptedTerms} onValueChange={setAcceptedTerms} color={acceptedTerms ? theme.colors.error : undefined} /> <Pressable onPress={() => router.push('https://git-scm.com/docs/git-checkout')}>
+       <Text style={styles.termsText}> {t('auth.register.acceptTerms')}{' '} <Text style={styles.termsLink}> {t('auth.register.termsAndConditions')} </Text> </Text> </Pressable> </View>
+
+      <View style={styles.buttonWrap}><AppButton title={isSubmitting ? t('common.submitting') : t('common.submit')} onPress={handleSubmit} /></View>
 
       <Modal visible={showSuccessModal} transparent animationType="fade">
         <View style={styles.successModalOverlay}>
@@ -63,6 +84,7 @@ export default function RegisterScreen() {
 
 function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
   return StyleSheet.create({
+  
   scroll: { paddingTop: theme.spacing.xl, paddingHorizontal: theme.spacing.xl },
   closeButton: { width: 40, height: 40, justifyContent: 'center', marginBottom: theme.spacing.sm },
   closeText: { color: theme.colors.textMuted, fontSize: 32, lineHeight: 34 },
@@ -81,5 +103,8 @@ function createStyles(theme: ReturnType<typeof useAppTheme>['theme']) {
   successModalContent: { backgroundColor: theme.colors.header, borderRadius: 17, padding: 24, width: '80%', maxWidth: 320, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 10, elevation: 10 },
   successModalTitle: { color: theme.colors.accent, fontSize: 24, fontWeight: '900', marginBottom: 12 },
   successModalMessage: { color: theme.colors.accent, fontSize: 16, textAlign: 'center' },
+  termsContainer: { flexDirection: 'row', alignItems: 'center', marginTop: theme.spacing.md, },
+  termsText: { marginLeft: theme.spacing.sm, color: theme.colors.text, flex: 1, },
+  termsLink: { color: theme.colors.textLink, textDecorationLine: 'underline', fontWeight: '700', },
   });
 }

@@ -34,7 +34,7 @@ export default function AccountScreen() {
         <AppTextInput label={t('account.fullName')} placeholder={t('account.fullNamePlaceholder')} value={form.name} error={errors.name} onChangeText={(text) => updateField('name', text)} />
         <AppTextInput label={t('account.email')} placeholder={t('account.emailPlaceholder')} value={form.email} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} error={errors.email} onChangeText={(text) => updateField('email', text)} />
         <AppTextInput label={t('account.phone')} placeholder={t('account.phonePlaceholder')} value={form.phone} keyboardType="phone-pad" error={errors.phone} onChangeText={(text) => updateField('phone', text)} />
-        <AppTextInput label={t('account.birthDate')} placeholder={t('account.birthDatePlaceholder')} value={form.birthDate} error={errors.birthDate} onChangeText={(text) => updateField('birthDate', text)} />
+        
         <View style={styles.buttonWrap}>
           <AppButton title={isSubmitting ? t('common.saving') : t('common.saveChanges')} onPress={submit} />
         </View>
